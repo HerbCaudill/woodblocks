@@ -15,7 +15,7 @@ export const Word = ({ size = 100, word }: WordProps) => {
     <div css={styles.word}>
       {word.split('').map((letter, i) => {
         const seed = `${word}-${i}`
-        return <Tile key={i} size={size} letter={letter as Letter} seed={seed} />
+        return <Tile key={i} size={size} letter={letter as Letter} seed={seed} isFaceUp={true} />
       })}
     </div>
   )

@@ -7,11 +7,12 @@ import { fade, linearGradient, pct, px, rotate, translate } from '../lib/css'
 import { TileProps } from '../types'
 import { Fragment } from 'react'
 
-export const Tile = ({ letter, size, seed = letter, isFaceUp = false }: TileProps) => {
-  const styles = getStyles({ size, seed })
+export const Tile = ({ letter, size, seed = letter, isFaceUp = true, onClick }: TileProps) => {
+  const expandedSeed = `${seed}_${isFaceUp ? 'up' : 'down'}`
+  const styles = getStyles({ size, seed: expandedSeed })
 
   return (
-    <div css={styles.tile}>
+    <div css={styles.tile} onClick={onClick}>
       {isFaceUp && (
         <Fragment>
           <span css={styles.letter}>{letter}</span>
@@ -96,7 +97,7 @@ const getStyles = ({ size = 100, seed }: Partial<TileProps>) => {
     ].join(' ')
 
   const tile = css({
-    display: 'block',
+    display: 'inline-block',
     position: 'relative',
     ...dimensions,
     ...borders,
@@ -105,6 +106,7 @@ const getStyles = ({ size = 100, seed }: Partial<TileProps>) => {
     boxSizing: 'border-box',
     margin: unitPx(0.5),
     transform: jiggle(2),
+    cursor: 'pointer',
   })
 
   const insetText = (fontSize: number) => {
