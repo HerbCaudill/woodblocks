@@ -1,3 +1,5 @@
+![SCRABBLE ATTACKS](public/images/logo.png)
+
 ## Rules
 
 - All tiles are flipped over at the beginning
@@ -17,9 +19,9 @@
 
 - 3 columns
 
+```
 | player 1 | tiles | player 2 |
 
-```
 FOO BAR (Nancy's words)
 
 ---------------------------
@@ -60,3 +62,8 @@ Herb's turn to flip
 - word proposed
 - word accepted/rejected
 - turn assignment
+
+## Prior art
+
+- Tile styling swiped from [this Codepen](https://codepen.io/32bitkid/pen/NPEgbx) by
+  [@32bitkid](https://codepen.io/32bitkid/pen/NPEgbx)
