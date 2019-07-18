@@ -5,14 +5,19 @@ import makeRandom from 'seed-random'
 import tinycolor from 'tinycolor2'
 import { fade, linearGradient, pct, px, rotate, translate } from '../lib/css'
 import { TileProps } from '../types'
+import { Fragment } from 'react'
 
-export const Tile = ({ letter, size, seed = letter }: TileProps) => {
+export const Tile = ({ letter, size, seed = letter, isFaceUp = false }: TileProps) => {
   const styles = getStyles({ size, seed })
 
   return (
     <div css={styles.tile}>
-      <span css={styles.letter}>{letter}</span>
-      <span css={styles.points}>{points(letter)}</span>
+      {isFaceUp && (
+        <Fragment>
+          <span css={styles.letter}>{letter}</span>
+          <span css={styles.points}>{points(letter)}</span>
+        </Fragment>
+      )}
     </div>
   )
 }
@@ -64,6 +69,7 @@ const getStyles = ({ size = 100, seed }: Partial<TileProps>) => {
     backgroundImage: 'url(/wood.jpg)',
     backgroundSize: pct(unit * 200),
     backgroundPosition: [rndUnitPx(600), rndUnitPx(600)].join(' '),
+    ':after': { ...backgroundOverlay },
   }
 
   const borders = {
@@ -83,20 +89,22 @@ const getStyles = ({ size = 100, seed }: Partial<TileProps>) => {
     borderStyle: 'solid',
   }
 
+  const jiggle = (n: number) =>
+    [
+      rotate(rnd0(n)), //
+      translate(rnd0UnitPx(n / 4), rnd0UnitPx(n / 4)),
+    ].join(' ')
+
   const tile = css({
     display: 'block',
     position: 'relative',
     ...dimensions,
     ...borders,
     ...background,
-    ':after': { ...backgroundOverlay },
     boxShadow: [0, px(small), px(med), 0, fade(black, 0.2).toString()].join(' '),
     boxSizing: 'border-box',
     margin: unitPx(0.5),
-    transform: [
-      rotate(rnd0(2)), //
-      translate(rnd0UnitPx(0.5), rnd0UnitPx(0.5)),
-    ].join(' '),
+    transform: jiggle(2),
   })
 
   const insetText = (fontSize: number) => {
