@@ -3,5 +3,5 @@ import { trim } from 'trim'
 export function toBooleanArray(s: string) {
   return trim(s)
     .split(LF)
-    .map(row => row.split('').map(col => (col === '·' || col === ' ' ? false : true)))
+    .map(row => row.split('').map(col => (col === '-' || col === ' ' ? false : true)))
 }

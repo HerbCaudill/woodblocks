@@ -1,4 +1,4 @@
-﻿import { pieces } from './Piece'
+﻿import { pieces } from './pieces'
 
 describe('pieces', () => {
   describe('constructor', () => {

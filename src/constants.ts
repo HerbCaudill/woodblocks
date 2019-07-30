@@ -1,2 +1,16 @@
-﻿export const LF = `
+﻿import { trim } from './trim'
+
+export const LF = `
 `
+
+export const emptyBoard = trim(`
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------`)

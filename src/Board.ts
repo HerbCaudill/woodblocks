@@ -12,8 +12,10 @@ export class Board {
 
   constructor(s: string = '') {
     this.size = N
+    this.rows = Array(N)
+      .fill(null)
+      .map(_ => Array(N).fill(false))
     if (s.length) this.fromString(s)
-    else this.fromString(emptyBoard)
   }
 
   fromArray = (arr: Layout) => ((this.rows = arr), this)
