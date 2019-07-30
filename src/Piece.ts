@@ -1,5 +1,5 @@
 ﻿export class Piece extends Array<boolean[]> {
-  constructor(s) {
+  constructor(s: string = '') {
     super()
   }
 }
