@@ -78,8 +78,8 @@ describe('Board', () => {
          ··········
          ··········
          ··········`)
-      expect(board.conflictsExist(pieces[0], [0, 0])).toBe(true)
-      expect(board.conflictsExist(pieces[0], [1, 0])).toBe(false)
+      expect(board.noConflicts(pieces[0], [0, 0])).toBe(false)
+      expect(board.noConflicts(pieces[0], [1, 0])).toBe(true)
     })
 
     test('case 2', () => {
@@ -94,8 +94,8 @@ describe('Board', () => {
          ··········
          ··········
          ··········`)
-      expect(board.conflictsExist(pieces[9], [0, 0])).toBe(false)
-      expect(board.conflictsExist(pieces[9], [1, 0])).toBe(true)
+      expect(board.noConflicts(pieces[9], [0, 0])).toBe(true)
+      expect(board.noConflicts(pieces[9], [1, 0])).toBe(false)
     })
   })
 
