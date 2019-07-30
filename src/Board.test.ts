@@ -1,4 +1,4 @@
-﻿import { board, Board } from './Board'
+﻿import { Board } from './Board'
 import { trim } from './trim'
 
 const EMPTY_BOARD = trim(`
