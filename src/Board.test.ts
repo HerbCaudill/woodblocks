@@ -102,23 +102,26 @@ describe('Board', () => {
   describe('pieceFits', () => {
     it('1x1', () => {
       const board = new Board()
-      expect(board.pieceFits(pieces[0], [0, 0])).toBe(true)
-      expect(board.pieceFits(pieces[0], [11, 0])).toBe(false)
-      expect(board.pieceFits(pieces[0], [0, 11])).toBe(false)
+      const piece = pieces[0]
+      expect(board.pieceFits(piece, [0, 0])).toBe(true)
+      expect(board.pieceFits(piece, [11, 0])).toBe(false)
+      expect(board.pieceFits(piece, [0, 11])).toBe(false)
     })
 
     it('5x1', () => {
       const board = new Board()
-      expect(board.pieceFits(pieces[4], [0, 0])).toBe(true)
-      expect(board.pieceFits(pieces[4], [8, 0])).toBe(false)
-      expect(board.pieceFits(pieces[4], [0, 8])).toBe(true)
+      const piece = pieces[4]
+      expect(board.pieceFits(piece, [0, 0])).toBe(true)
+      expect(board.pieceFits(piece, [8, 0])).toBe(false)
+      expect(board.pieceFits(piece, [0, 8])).toBe(true)
     })
 
     it('1x5', () => {
       const board = new Board()
-      expect(board.pieceFits(pieces[8], [0, 0])).toBe(true)
-      expect(board.pieceFits(pieces[8], [8, 0])).toBe(true)
-      expect(board.pieceFits(pieces[8], [0, 8])).toBe(false)
+      const piece = pieces[8]
+      expect(board.pieceFits(piece, [0, 0])).toBe(true)
+      expect(board.pieceFits(piece, [8, 0])).toBe(true)
+      expect(board.pieceFits(piece, [0, 8])).toBe(false)
     })
   })
 
