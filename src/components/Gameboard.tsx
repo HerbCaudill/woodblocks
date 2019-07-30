@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 
-interface BoardProps {
+interface GameboardProps {
   size: number
 }
 
-export const Board = (props: BoardProps) => {
-  const N = 10
+const N = 10
+export const Gameboard = (props: GameboardProps) => {
   const styles = getStyles(props)
   return (
     <div css={styles.board}>
@@ -18,10 +18,13 @@ export const Board = (props: BoardProps) => {
   )
 }
 
-const getStyles = ({ size = 50 }: Partial<BoardProps>) => {
+const getStyles = ({ size = 50 }: Partial<GameboardProps>) => {
   return {
     board: css({
+      width: N * size,
+      height: N * size,
       display: 'flex',
+      background: 'yellow',
       justifyContent: 'center',
     }),
   }
