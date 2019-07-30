@@ -1,9 +1,11 @@
 ﻿import { Board } from './Board'
-import { boardIsEmpty } from './boardIsEmpty'
-import { emptyBoard } from './constants'
-import { match } from './match'
-import { p1x1, p1x2, p1x5, p5x1, pL2ne, pL2nw, pL3ne } from './pieces'
-import { trim } from './trim'
+import { boardIsEmpty } from './lib/boardIsEmpty'
+import { emptyBoard } from './lib/constants'
+import { match } from './lib/match'
+import { trim } from './lib/trim'
+import { pieces } from './pieces'
+
+const { p1x1, p1x2, p1x5, p5x1, pL2ne, pL2nw, pL3ne } = pieces
 
 describe('Board', () => {
   describe('constructor', () => {
@@ -15,7 +17,7 @@ describe('Board', () => {
     describe('fromString', () => {
       it('should construct from a given string', () => {
         const board = new Board(`
-          x---------
+          @---------
           ----------
           ----------
           ----------
@@ -58,7 +60,7 @@ describe('Board', () => {
   describe('conflicts', () => {
     test('case 1', () => {
       const board = new Board(`
-         x---------
+         @---------
          ----------
          ----------
          ----------
@@ -74,7 +76,7 @@ describe('Board', () => {
 
     test('case 2', () => {
       const board = new Board(`
-         -x--------
+         -@--------
          ----------
          ----------
          ----------
@@ -119,15 +121,15 @@ describe('Board', () => {
 
   describe('canAddPiece', () => {
     const board = new Board(`
-        x---------
-        xxxx------
-        xxxx------
-        xxxx-x----
-        -xxx-xxx--
-        -----xxx--
-        -----x----
-        -xxxxxxxxx
-        -xxxxxxxxx
+        @---------
+        @@@@------
+        @@@@------
+        @@@@-@----
+        -@@@-@@@--
+        -----@@@--
+        -----@----
+        -@@@@@@@@@
+        -@@@@@@@@@
         ----------`)
 
     it('5x1', () => {
@@ -156,7 +158,7 @@ describe('Board', () => {
 
       match(
         board.addPiece(p1x1, [0, 0]),
-        `x---------
+        `@---------
          ----------
          ----------
          ----------
@@ -175,8 +177,8 @@ describe('Board', () => {
         board,
         `----------
          ----------
-         x---------
-         x---------
+         @---------
+         @---------
          ----------
          ----------
          ----------
@@ -195,8 +197,8 @@ describe('Board', () => {
          ----------
          ----------
          ----------
-         ---xx-----
-         ----x-----
+         ---@@-----
+         ----@-----
          ----------
          ----------
          ----------
@@ -208,9 +210,9 @@ describe('Board', () => {
         `----------
          ----------
          ----------
-         ---xxx----
-         ---xxx----
-         ----xx----
+         ---@@@----
+         ---@@@----
+         ----@@----
          ----------
          ----------
          ----------
@@ -223,7 +225,7 @@ describe('Board', () => {
     it('case 1', () => {
       const piece = p1x1
       const board = new Board(`
-        x---------
+        @---------
         ----------
         ----------
         ----------
@@ -237,16 +239,16 @@ describe('Board', () => {
       match(
         new Board().fromArray(allowed),
         `
-        -xxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
+        -@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
         `
       )
     })
@@ -254,30 +256,30 @@ describe('Board', () => {
     it('case 2', () => {
       const piece = p5x1
       const board = new Board(`
-        x---------
-        xxxx------
-        xxxx------
-        xxxx-x----
-        -xxx-xxx--
-        -----xxx--
-        -----x----
-        -xxxxxxxxx
-        -xxxxxxxxx
+        @---------
+        @@@@------
+        @@@@------
+        @@@@-@----
+        -@@@-@@@--
+        -----@@@--
+        -----@----
+        -@@@@@@@@@
+        -@@@@@@@@@
         ----------`)
       const allowed = board.allowedLocations(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
         trim(`
-        -xxxxx----
-        ----xx----
-        ----xx----
+        -@@@@@----
+        ----@@----
+        ----@@----
         ----------
         ----------
-        x---------
-        x---------
+        @---------
+        @---------
         ----------
         ----------
-        xxxxxx----
+        @@@@@@----
         `)
       )
     })
@@ -285,25 +287,25 @@ describe('Board', () => {
     it('case 3', () => {
       const piece = pL3ne
       const board = new Board(`
-        x-----x---
-        xxxx-xxx--
-        xxxx------
-        xxxx-x----
-        -xxx-xxx--
-        -----xxx--
-        -----x----
-        -xxxxxxxxx
-        -xxxxxxxxx
+        @-----@---
+        @@@@-@@@--
+        @@@@------
+        @@@@-@----
+        -@@@-@@@--
+        -----@@@--
+        -----@----
+        -@@@@@@@@@
+        -@@@@@@@@@
         ----------
         `)
       const allowed = board.allowedLocations(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
         trim(`
-        --x----x--
+        --@----@--
         ----------
-        ------xx--
-        ------xx--
+        ------@@--
+        ------@@--
         ----------
         ----------
         ----------
@@ -319,25 +321,25 @@ describe('Board', () => {
     it('clears a row', () => {
       match(
         new Board(`
-        ------x---
-        xxxxxxxxxx
-        ---xxx----
+        ------@---
+        @@@@@@@@@@
+        ---@@@----
         ----------
         ----------
         ----------
-        xxxxxxx---
+        @@@@@@@---
         ----------
         ----------
         ----------
       `).clearFilled(),
         `
-        ------x---
+        ------@---
         ----------
-        ---xxx----
+        ---@@@----
         ----------
         ----------
         ----------
-        xxxxxxx---
+        @@@@@@@---
         ----------
         ----------
         ----------
@@ -348,26 +350,26 @@ describe('Board', () => {
     it('clears multiple rows', () => {
       match(
         new Board(`
-        ------x---
-        xxxxxxxxxx
-        xxxxxxxxxx
-        xxxxxxxxxx
+        ------@---
+        @@@@@@@@@@
+        @@@@@@@@@@
+        @@@@@@@@@@
         ----------
         ----------
-        xxxxxxx---
-        xxxxx-xxxx
+        @@@@@@@---
+        @@@@@-@@@@
         ----------
         ----------
       `).clearFilled(),
         `
-        ------x---
+        ------@---
         ----------
         ----------
         ----------
         ----------
         ----------
-        xxxxxxx---
-        xxxxx-xxxx
+        @@@@@@@---
+        @@@@@-@@@@
         ----------
         ----------
       `
@@ -377,25 +379,25 @@ describe('Board', () => {
     it('clears a column', () => {
       match(
         new Board(`
-        ------xx--
-        -------x--
-        ---xxx-x--
-        -------x--
-        -------x--
-        -------x--
-        xxxxxxxx--
-        -------x--
-        -------x--
-        -------x--
+        ------@@--
+        -------@--
+        ---@@@-@--
+        -------@--
+        -------@--
+        -------@--
+        @@@@@@@@--
+        -------@--
+        -------@--
+        -------@--
       `).clearFilled(),
         `
-        ------x---
+        ------@---
         ----------
-        ---xxx----
+        ---@@@----
         ----------
         ----------
         ----------
-        xxxxxxx---
+        @@@@@@@---
         ----------
         ----------
         ----------
@@ -406,25 +408,25 @@ describe('Board', () => {
     it('clears multiple columns', () => {
       match(
         new Board(`
-        ------xxxx
-        -------x-x
-        ---xxx-x-x
-        -------x-x
-        -------x-x
-        -------x-x
-        xxxxxxxx-x
-        -------x-x
-        -------x-x
-        -------x-x
+        ------@@@@
+        -------@-@
+        ---@@@-@-@
+        -------@-@
+        -------@-@
+        -------@-@
+        @@@@@@@@-@
+        -------@-@
+        -------@-@
+        -------@-@
       `).clearFilled(),
         `
-        ------x-x-
+        ------@-@-
         ----------
-        ---xxx----
+        ---@@@----
         ----------
         ----------
         ----------
-        xxxxxxx---
+        @@@@@@@---
         ----------
         ----------
         ----------
@@ -435,21 +437,21 @@ describe('Board', () => {
     it('clears a row and a column', () => {
       match(
         new Board(`
-        -------x--
-        -------x--
-        ---xxx-x--
-        -------x--
-        -------x--
-        -------x--
-        xxxxxxxxxx
-        -------x--
-        -------x--
-        -------x--
+        -------@--
+        -------@--
+        ---@@@-@--
+        -------@--
+        -------@--
+        -------@--
+        @@@@@@@@@@
+        -------@--
+        -------@--
+        -------@--
       `).clearFilled(),
         `
         ----------
         ----------
-        ---xxx----
+        ---@@@----
         ----------
         ----------
         ----------
@@ -464,21 +466,21 @@ describe('Board', () => {
     it('clears multiple rows and columns', () => {
       match(
         new Board(`
-        ------xx--
-        ------xx--
-        ---xxxxx--
-        ------xx--
-        ------xx--
-        xxxxxxxxxx
-        xxxxxxxxxx
-        ------xx--
-        ------xx--
-        ------xx--
+        ------@@--
+        ------@@--
+        ---@@@@@--
+        ------@@--
+        ------@@--
+        @@@@@@@@@@
+        @@@@@@@@@@
+        ------@@--
+        ------@@--
+        ------@@--
       `).clearFilled(),
         `
         ----------
         ----------
-        ---xxx----
+        ---@@@----
         ----------
         ----------
         ----------

@@ -1,7 +1,5 @@
-﻿import { LF, emptyBoard } from './constants'
-import { toBooleanArray } from 'toBooleanArray'
-import { number } from 'prop-types'
-import { range } from 'range'
+﻿import { toBooleanArray } from 'lib/toBooleanArray'
+import { LF } from './lib/constants'
 
 // all boards are 10 x 10 for now
 const N = 10
@@ -22,9 +20,9 @@ export class Board {
 
   fromString = (s: string) => this.fromArray(toBooleanArray(s))
 
-  toString = () => this.rows.map(row => row.map(cell => (cell ? 'x' : '-')).join('')).join(LF)
+  toString = () => this.rows.map(row => row.map(cell => (cell ? '@' : '-')).join('')).join(LF)
 
-  // determines whether the piece doesn't conflict with existing pieces on the board
+  // determines whether the piece conflicts with existing pieces on the board
   noConflicts = (piece: Layout, [x, y]: Location) => {
     const conflicts = piece.map((row, row_index) =>
       row.map((cell, col_index) => this.rows[row_index + y][col_index + x] && cell)
@@ -35,16 +33,16 @@ export class Board {
 
   // determines whether the piece fits entirely within the boundaries of the board
   pieceFits = (piece: Layout, [x, y]: Location) => {
-    const rowCount = piece.length
-    const colCount = Math.max(...piece.map(row => row.length))
-    return y + rowCount <= N && x + colCount <= N
+    const height = piece.length
+    const width = Math.max(...piece.map(row => row.length))
+    return y + height <= N && x + width <= N
   }
 
   // returns true if there are no conflicts, and the piece fits within the boundaries of the board
   canAddPiece = (piece: Layout, [x, y]: Location) =>
     this.pieceFits(piece, [x, y]) && this.noConflicts(piece, [x, y])
 
-  // tries to add piece at the given location; returns false if it cannot be added,
+  // tries to add piece at the given location; throws an error if it cannot be added,
   // returns the board if it can
   addPiece = (piece: Layout, [x, y]: Location) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
@@ -85,11 +83,10 @@ export class Board {
     filledRows.forEach(clearRow)
     filledColumns.forEach(clearColumn)
 
-    // console.log(this.toString())
     return this
   }
 }
 
-type Line = boolean[]
-type Layout = Line[]
-type Location = [number, number]
+export type Line = boolean[]
+export type Layout = Line[]
+export type Location = [number, number]

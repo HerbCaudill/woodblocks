@@ -1,4 +1,4 @@
-﻿import { Board } from './Board'
+﻿import { Board } from '../Board'
 
 export const boardIsEmpty = (board: Board) => {
   for (let i = 0; i < board.size; i++) {

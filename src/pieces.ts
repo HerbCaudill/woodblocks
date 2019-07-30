@@ -1,86 +1,82 @@
-﻿import { toBooleanArray } from './toBooleanArray'
+﻿import { Layout } from 'Board'
+import { trim } from 'lib/trim'
+import { LF } from 'lib/constants'
 
-export const pieces = [
-  `x`,
-  `xx`,
-  `xxx`,
-  `xxxx`,
-  `xxxxx`,
+const pieces_s = {
+  p1x1: `@`,
+  p2x1: `@@`,
+  p3x1: `@@@`,
+  p4x1: `@@@@`,
+  p5x1: `@@@@@`,
 
-  `x
-   x`,
+  p1x2: `@
+         @`,
 
-  `x
-   x
-   x`,
+  p1x3: `@
+         @
+         @`,
 
-  `x
-   x
-   x
-   x`,
+  p1x4: `@
+         @
+         @
+         @`,
 
-  `x
-   x
-   x
-   x
-   x`,
+  p1x5: `@
+         @
+         @
+         @
+         @`,
 
-  `xx
-   x-`,
+  pL2nw: `@@
+          @-`,
 
-  `xx
-   -x`,
+  pL2ne: `@@
+          -@`,
 
-  `-x
-   xx`,
+  pL2se: `-@
+          @@`,
 
-  `x-
-   xx`,
+  pL2sw: `@-
+          @@`,
 
-  `xxx
-   x--
-   x--`,
+  pL3nw: `@@@
+          @--
+          @--`,
 
-  `xxx
-   --x
-   --x`,
+  pL3ne: `@@@
+          --@
+          --@`,
 
-  `--x
-   --x
-   xxx`,
+  pL3se: `--@
+          --@
+          @@@`,
 
-  `x--
-   x--
-   xxx`,
+  pL3sw: `@--
+          @--
+          @@@`,
 
-  `xx
-   xx`,
+  p2x2: `@@
+         @@`,
 
-  `xxx
-   xxx
-   xxx`,
-].map(toBooleanArray)
+  p3x3: `@@@
+         @@@
+         @@@`,
+} as { [key: string]: string }
 
-export const p1x1 = pieces[0]
-export const p2x1 = pieces[1]
-export const p3x1 = pieces[2]
-export const p4x1 = pieces[3]
-export const p5x1 = pieces[4]
+type PieceDictionary = {
+  [key: string]: Layout
+}
 
-export const p1x2 = pieces[5]
-export const p1x3 = pieces[6]
-export const p1x4 = pieces[7]
-export const p1x5 = pieces[8]
+const empty = {} as PieceDictionary
 
-export const pL2nw = pieces[9]
-export const pL2ne = pieces[10]
-export const pL2se = pieces[11]
-export const pL2sw = pieces[12]
+export const pieces = Object.keys(pieces_s).reduce(toBooleanReducer, empty)
 
-export const pL3nw = pieces[13]
-export const pL3ne = pieces[14]
-export const pL3se = pieces[15]
-export const pL3sw = pieces[16]
+function toBooleanReducer(result: PieceDictionary, key: string) {
+  return { ...result, [key]: toBooleanArray(pieces_s[key]) }
+}
 
-export const p2x2 = pieces[17]
-export const p3x3 = pieces[18]
+function toBooleanArray(s: string) {
+  return trim(s)
+    .split(LF)
+    .map(row => row.split('').map(col => (col === '-' || col === ' ' ? false : true)))
+}

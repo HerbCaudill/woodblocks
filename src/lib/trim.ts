@@ -1,4 +1,5 @@
 ﻿import { LF } from './constants'
+
 export const trim = (s: string) =>
   s
     .trim()

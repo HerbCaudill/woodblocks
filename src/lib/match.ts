@@ -1,4 +1,4 @@
-﻿import { Board } from './Board'
+﻿import { Board } from '../Board'
 import { trim } from './trim'
 
 export const match = (board: Board, s: string) => {

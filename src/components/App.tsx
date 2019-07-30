@@ -1,11 +1,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import logo from './logo.svg';
-import { Global } from '@emotion/core'
+import logo from './logo.svg'
 
 function App() {
   return (
-    <Global css={{background:'pink'}} />
+    // <Global css={{background:'pink'}} />
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -22,7 +21,7 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
