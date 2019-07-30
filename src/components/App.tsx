@@ -1,12 +1,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import { Board } from './components/Board'
+import { Game } from './Game'
 
 function App() {
   return (
-    // <Global css={{background:'pink'}} />
     <div className="App">
-      <Board />
+      <Game />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import { pieces } from 'models/pieces'
+import { useDrag } from 'react-dnd'
 
 interface PieceProps {
   size: number
@@ -8,10 +9,17 @@ interface PieceProps {
 }
 
 export const Piece = ({ size, name }: PieceProps) => {
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: 'piece' },
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  })
+
   const styles = getStyles({ size, name })
   const piece = pieces[name]
   return (
-    <div css={styles.piece}>
+    <div css={styles.piece(isDragging)} ref={drag}>
       {piece.map((row, i) => (
         <div key={i} css={styles.row}>
           {row.map((cell, j) => (
@@ -31,9 +39,12 @@ const getStyles = ({ size = 33 }: Partial<PieceProps>) => {
     on: 'rgba(0,0,255,10%)',
   }
   return {
-    piece: css({
-      padding: 2,
-    }),
+    piece: (isDragging: boolean) =>
+      css({
+        padding: 2,
+        margin: 'auto',
+        opacity: isDragging ? 0.5 : 1,
+      }),
     row: css({
       height: size,
       display: 'flex',

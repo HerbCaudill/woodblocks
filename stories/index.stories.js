@@ -61,7 +61,7 @@ for (const piece in pieces) {
 }
 
 storiesOf('Game', module)
-  .add('empty', () => <Game board={b0} />)
-  .add('one piece', () => <Game board={b1} />)
-  .add('many pieces', () => <Game board={b2} />)
-  .add('full', () => <Game board={b3} />)
+  .add('empty', () => <Game board={b0} randomSeed="1" />)
+  .add('one piece', () => <Game board={b1} randomSeed="2" />)
+  .add('many pieces', () => <Game board={b2} randomSeed="3" />)
+  .add('full', () => <Game board={b3} randomSeed="4" />)

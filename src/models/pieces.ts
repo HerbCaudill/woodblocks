@@ -1,8 +1,12 @@
 ﻿import { Layout } from 'models/Board'
-import { trim } from 'lib/trim'
-import { LF } from 'lib/constants'
+import makeRandom from 'seed-random'
+import { toBooleanReducer } from './toBooleanReducer'
 
-const pieces_s = {
+export type PieceDictionary = {
+  [key: string]: Layout
+}
+
+export const pieces_s = {
   p1x1: `@`,
   p2x1: `@@`,
   p3x1: `@@@`,
@@ -63,20 +67,10 @@ const pieces_s = {
          @@@`,
 } as { [key: string]: string }
 
-type PieceDictionary = {
-  [key: string]: Layout
-}
+export const pieces = Object.keys(pieces_s).reduce(toBooleanReducer, {} as PieceDictionary)
 
-const empty = {} as PieceDictionary
-
-export const pieces = Object.keys(pieces_s).reduce(toBooleanReducer, empty)
-
-function toBooleanReducer(result: PieceDictionary, key: string) {
-  return { ...result, [key]: toBooleanArray(pieces_s[key]) }
-}
-
-function toBooleanArray(s: string) {
-  return trim(s)
-    .split(LF)
-    .map(row => row.split('').map(col => (col === '-' || col === ' ' ? false : true)))
+export const randomPiece = (randomSeed: string) => {
+  const random = makeRandom(randomSeed)
+  const keys = Object.keys(pieces)
+  return keys[Math.floor(random() * keys.length)]
 }
