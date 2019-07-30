@@ -1,31 +1,47 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
+import { Board } from 'models/Board'
 
 interface GameboardProps {
   size: number
+  board: Board
 }
 
-const N = 10
-export const Gameboard = (props: GameboardProps) => {
-  const styles = getStyles(props)
+export const Gameboard = ({ size, board }: GameboardProps) => {
+  const styles = getStyles({ size, board })
   return (
     <div css={styles.board}>
-      {/* {word.split('').map((letter, i) => {
-        const seed = `${word}-${i}`
-        return <Tile key={i} size={size} letter={letter as Letter} seed={seed} isFaceUp={true} />
-      })} */}
+      {board.rows.map((row, i) => (
+        <div css={styles.row}>
+          {row.map(cell => (
+            <div css={styles.tile(cell)}>&nbsp;</div>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }
 
-const getStyles = ({ size = 50 }: Partial<GameboardProps>) => {
+const getStyles = ({ size = 33 }: Partial<GameboardProps>) => {
+  const colors = {
+    off: 'rgba(0,0,0,5%)',
+    on: 'rgba(0,0,255,10%)',
+  }
   return {
     board: css({
-      width: N * size,
-      height: N * size,
-      display: 'flex',
-      background: 'yellow',
-      justifyContent: 'center',
+      padding: 2,
     }),
+    row: css({
+      height: size,
+      display: 'flex',
+      marginBottom: 2,
+    }),
+    tile: (cell: boolean) =>
+      css({
+        width: size,
+        height: size,
+        background: cell ? colors.on : colors.off,
+        marginRight: 2,
+      }),
   }
 }

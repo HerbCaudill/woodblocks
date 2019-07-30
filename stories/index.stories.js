@@ -3,7 +3,52 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { linkTo } from '@storybook/addon-links'
+import { Board } from '../src/models/Board'
+import { Gameboard } from '../src/components/Gameboard'
 
-import { Board } from '../src/components/Board'
+const b0 = new Board()
 
-storiesOf('Board', module).add('Board', () => <Board />)
+const b1 = new Board(`
+  @---------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+  ----------
+`)
+
+const b2 = new Board(`
+  @---------
+  @@@@------
+  @@@@------
+  @@@@-@----
+  -@@@-@@@--
+  -----@@@--
+  -----@----
+  -@@@@@@@@@
+  -@@@@@@@@@
+  ----------
+  `)
+
+const b3 = new Board(`
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  @@@@@@@@@@
+  `)
+
+storiesOf('Gameboard', module)
+  .add('empty', () => <Gameboard board={b0} />)
+  .add('one piece', () => <Gameboard board={b1} />)
+  .add('many pieces', () => <Gameboard board={b2} />)
+  .add('full', () => <Gameboard board={b3} />)

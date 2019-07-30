@@ -2,7 +2,7 @@
 import { LF } from '../lib/constants'
 
 // all boards are 10 x 10 for now
-const N = 10
+export const N = 10
 
 export class Board {
   size: number
@@ -16,7 +16,10 @@ export class Board {
     if (s.length) this.fromString(s)
   }
 
-  fromArray = (arr: Layout) => ((this.rows = arr), this)
+  fromArray = (arr: Layout) => {
+    this.rows = arr
+    return this
+  }
 
   fromString = (s: string) => this.fromArray(toBooleanArray(s))
 

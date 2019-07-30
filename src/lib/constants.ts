@@ -3,7 +3,7 @@
 export const LF = `
 `
 
-export const emptyBoard = `----------
+export const emptyBoard = trim(`
 ----------
 ----------
 ----------
@@ -12,4 +12,5 @@ export const emptyBoard = `----------
 ----------
 ----------
 ----------
-----------`
+----------
+----------`)
