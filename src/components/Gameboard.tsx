@@ -12,9 +12,11 @@ export const Gameboard = ({ size, board }: GameboardProps) => {
   return (
     <div css={styles.board}>
       {board.rows.map((row, i) => (
-        <div css={styles.row}>
-          {row.map(cell => (
-            <div css={styles.tile(cell)}>&nbsp;</div>
+        <div key={i} css={styles.row}>
+          {row.map((cell, j) => (
+            <div key={j} css={styles.tile(cell)}>
+              &nbsp;
+            </div>
           ))}
         </div>
       ))}
