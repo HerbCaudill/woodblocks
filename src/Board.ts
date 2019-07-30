@@ -1,9 +1,9 @@
-﻿import { trim } from './trim'
-import { LF } from './constants'
+﻿import { LF } from './constants'
+import { toBooleanArray } from 'toBooleanArray'
 
-export const board = (s: string = '') => new Board(s)
-
+// all boards are 10 x 10 for now
 const N = 10
+
 export class Board extends Array<boolean[]> {
   size: number
 
@@ -17,14 +17,7 @@ export class Board extends Array<boolean[]> {
     }
   }
 
-  toString = () => {
-    return this.map(row => row.map(col => (col ? '■' : '·')).join('')).join(LF)
-  }
-
-  fromString = (s: string) => {
-    trim(s)
-      .split(LF)
-      .forEach((row, i) => (this[i] = row.split('').map(v => (v === '·' ? false : true))))
-    return this
-  }
+  fromArray = (arr: boolean[][]) => arr.map((row, i) => (this[i] = row))
+  fromString = (s: string) => this.fromArray(toBooleanArray(s))
+  toString = () => this.map(row => row.map(col => (col ? '■' : '·')).join('')).join(LF)
 }
