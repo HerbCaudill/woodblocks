@@ -1,6 +1,8 @@
 ﻿import { trim } from './trim'
 import { LF } from './constants'
 
+export const board = (s: string = '') => new Board(s)
+
 const N = 10
 export class Board extends Array<boolean[]> {
   size: number
