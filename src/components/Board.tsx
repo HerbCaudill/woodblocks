@@ -5,7 +5,7 @@ interface BoardProps {
   size: number
 }
 
-const Board = (props: BoardProps) => {
+export const Board = (props: BoardProps) => {
   const N = 10
   const styles = getStyles(props)
   return (

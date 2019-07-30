@@ -1,4 +1,4 @@
-﻿import { Layout } from 'Board'
+﻿import { Layout } from 'models/Board'
 import { trim } from 'lib/trim'
 import { LF } from 'lib/constants'
 

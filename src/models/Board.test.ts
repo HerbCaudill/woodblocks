@@ -1,8 +1,8 @@
 ﻿import { Board } from './Board'
-import { boardIsEmpty } from './lib/boardIsEmpty'
-import { emptyBoard } from './lib/constants'
-import { match } from './lib/match'
-import { trim } from './lib/trim'
+import { boardIsEmpty } from '../lib/boardIsEmpty'
+import { emptyBoard } from '../lib/constants'
+import { match } from '../lib/match'
+import { trim } from '../lib/trim'
 import { pieces } from './pieces'
 
 const { p1x1, p1x2, p1x5, p5x1, pL2ne, pL2nw, pL3ne } = pieces

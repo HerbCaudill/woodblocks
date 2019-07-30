@@ -1,5 +1,5 @@
 ﻿import { toBooleanArray } from 'lib/toBooleanArray'
-import { LF } from './lib/constants'
+import { LF } from '../lib/constants'
 
 // all boards are 10 x 10 for now
 const N = 10
