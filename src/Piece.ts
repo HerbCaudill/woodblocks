@@ -1,5 +1,62 @@
-﻿export class Piece extends Array<boolean[]> {
-  constructor(s: string = '') {
-    super()
-  }
-}
+﻿import { toBooleanArray } from './toBooleanArray'
+
+export const pieces = [
+  `■`,
+  `■■`,
+  `■■■`,
+  `■■■■`,
+  `■■■■■`,
+
+  `■
+   ■`,
+
+  `■
+   ■
+   ■`,
+
+  `■
+   ■
+   ■
+   ■`,
+
+  `■
+   ■
+   ■
+   ■
+   ■`,
+
+  `■■
+   ■`,
+
+  `■■
+   ·■`,
+
+  `■
+   ■■`,
+
+  `·■
+   ■■`,
+
+  `■■■
+   ■
+   ■`,
+
+  `■■■
+   ··■
+   ··■`,
+
+  `··■
+   ··■
+   ■■■`,
+
+  `■
+   ■
+   ■■■`,
+
+  `■■
+   ■■`,
+
+  `■■■
+   ■■■
+   ■■■`,
+].map(toBooleanArray)
