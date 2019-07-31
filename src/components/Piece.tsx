@@ -11,14 +11,17 @@ interface PieceProps {
 export const Piece = ({ name }: PieceProps) => {
   const { tileSize } = useGameState()
 
-  const pieceTileSize = tileSize / 2
-
   const [{ isDragging }, drag] = useDrag({
-    item: { type: 'piece' },
+    item: {
+      type: 'piece',
+      name,
+    },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
   })
+
+  const pieceTileSize = tileSize / 2
 
   const colors = {
     off: 'transparent',

@@ -2,23 +2,9 @@
 import { css, jsx } from '@emotion/core'
 import { useGameState } from 'context'
 import { Tile } from './Tile'
-import { useDrop } from 'react-dnd'
 
 export const Gameboard = () => {
   const { boardSize, tileSize, board } = useGameState()
-
-  const addPiece = () => {}
-
-  // const [{ isOver, canDrop }, drop] = useDrop({
-  const [, drop] = useDrop({
-    accept: 'piece',
-    canDrop: () => true,
-    drop: () => addPiece(),
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
-    }),
-  })
 
   const styles = {
     board: css({
@@ -34,14 +20,15 @@ export const Gameboard = () => {
   }
 
   return (
-    <div ref={drop} css={styles.board}>
-      {board.rows.map((row, i) => (
-        <div key={i} css={styles.row}>
-          {row.map((cell, j) => (
-            <Tile key={j} isFilled={cell} />
+    <div css={styles.board}>
+      {board.rows.map((row, y) => (
+        <div key={y} css={styles.row}>
+          {row.map((cell, x) => (
+            <Tile key={x} location={[x, y]} isFilled={cell} />
           ))}
         </div>
       ))}
+      {/* <pre>{JSON.stringify(collectedProps)}</pre> */}
     </div>
   )
 }
