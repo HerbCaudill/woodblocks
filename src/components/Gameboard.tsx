@@ -1,40 +1,47 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core'
-import { Board } from 'models/Board'
+import { useGameState } from 'context'
 import { Tile } from './Tile'
+import { useDrop } from 'react-dnd'
 
-interface GameboardProps {
-  size: number
-  board: Board
-}
+export const Gameboard = () => {
+  const { boardSize, tileSize, board } = useGameState()
 
-const emptyBoard = new Board()
+  const addPiece = () => {}
 
-export const Gameboard = ({ size = 50, board = emptyBoard }: GameboardProps) => {
-  const styles = getStyles({ size, board })
+  // const [{ isOver, canDrop }, drop] = useDrop({
+  const [, drop] = useDrop({
+    accept: 'piece',
+    canDrop: () => true,
+    drop: () => addPiece(),
+    collect: monitor => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
+    }),
+  })
+
+  const styles = {
+    board: css({
+      padding: '1em',
+      background: 'rgba(0,0,0,2%)',
+      width: tileSize * boardSize,
+    }),
+    row: css({
+      height: tileSize,
+      display: 'flex',
+      marginBottom: 2,
+    }),
+  }
 
   return (
-    <div css={styles.board}>
+    <div ref={drop} css={styles.board}>
       {board.rows.map((row, i) => (
         <div key={i} css={styles.row}>
           {row.map((cell, j) => (
-            <Tile key={j} on={cell} size={size} />
+            <Tile key={j} isFilled={cell} />
           ))}
         </div>
       ))}
     </div>
   )
-}
-
-const getStyles = ({ size = 33 }: Partial<GameboardProps>) => {
-  return {
-    board: css({
-      padding: 2,
-    }),
-    row: css({
-      height: size,
-      display: 'flex',
-      marginBottom: 2,
-    }),
-  }
 }

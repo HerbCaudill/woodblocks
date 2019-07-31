@@ -1,13 +1,27 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core'
+import React from 'react'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+import { GameStateProvider } from '../context'
 import { Game } from './Game'
+import { Board } from 'models/Board'
 
-function App() {
+interface ProvidersProps {
+  board?: Board
+  children: React.ReactNode
+}
+
+export function Providers({ children, board }: ProvidersProps) {
   return (
-    <div className="App">
-      <Game />
-    </div>
+    <GameStateProvider board={board}>
+      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+    </GameStateProvider>
   )
 }
 
-export default App
+export function App() {
+  return (
+    <Providers>
+      <Game randomSeed={'abc'} />
+    </Providers>
+  )
+}

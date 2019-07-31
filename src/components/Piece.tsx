@@ -2,13 +2,17 @@
 import { css, jsx } from '@emotion/core'
 import { pieces } from 'models/pieces'
 import { useDrag } from 'react-dnd'
+import { useGameState } from 'context'
 
 interface PieceProps {
-  size: number
   name: keyof typeof pieces
 }
 
-export const Piece = ({ size, name }: PieceProps) => {
+export const Piece = ({ name }: PieceProps) => {
+  const { tileSize } = useGameState()
+
+  const pieceTileSize = tileSize / 2
+
   const [{ isDragging }, drag] = useDrag({
     item: { type: 'piece' },
     collect: monitor => ({
@@ -16,10 +20,35 @@ export const Piece = ({ size, name }: PieceProps) => {
     }),
   })
 
-  const styles = getStyles({ size, name })
+  const colors = {
+    off: 'transparent',
+    on: 'rgba(0,0,255,10%)',
+  }
+
+  const styles = {
+    piece: css({
+      cursor: 'pointer',
+      padding: 2,
+      margin: 'auto',
+      opacity: isDragging ? 0.5 : 1,
+    }),
+    row: css({
+      height: pieceTileSize,
+      display: 'flex',
+      marginBottom: 2,
+    }),
+    tile: (cell: boolean) =>
+      css({
+        width: pieceTileSize,
+        height: pieceTileSize,
+        background: cell ? colors.on : colors.off,
+        marginRight: 2,
+      }),
+  }
   const piece = pieces[name]
+
   return (
-    <div css={styles.piece(isDragging)} ref={drag}>
+    <div css={styles.piece} ref={drag}>
       {piece.map((row, i) => (
         <div key={i} css={styles.row}>
           {row.map((cell, j) => (
@@ -31,31 +60,4 @@ export const Piece = ({ size, name }: PieceProps) => {
       ))}
     </div>
   )
-}
-
-const getStyles = ({ size = 33 }: Partial<PieceProps>) => {
-  const colors = {
-    off: 'transparent',
-    on: 'rgba(0,0,255,10%)',
-  }
-  return {
-    piece: (isDragging: boolean) =>
-      css({
-        padding: 2,
-        margin: 'auto',
-        opacity: isDragging ? 0.5 : 1,
-      }),
-    row: css({
-      height: size,
-      display: 'flex',
-      marginBottom: 2,
-    }),
-    tile: (cell: boolean) =>
-      css({
-        width: size,
-        height: size,
-        background: cell ? colors.on : colors.off,
-        marginRight: 2,
-      }),
-  }
 }
