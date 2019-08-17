@@ -2,7 +2,7 @@
 import { boardIsEmpty } from '../lib/boardIsEmpty'
 import { emptyBoard } from '../lib/constants'
 import { match } from '../lib/match'
-import { trim } from '../lib/trim'
+import { trimMultiple } from '../lib/trimMultiple'
 import { pieces } from './pieces'
 
 const { p1x1, p1x2, p1x5, p5x1, pL2ne, pL2nw, pL3ne } = pieces
@@ -269,7 +269,7 @@ describe('Board', () => {
       const allowed = board.allowedLocations(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
-        trim(`
+        trimMultiple(`
         -@@@@@----
         ----@@----
         ----@@----
@@ -301,7 +301,7 @@ describe('Board', () => {
       const allowed = board.allowedLocations(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
-        trim(`
+        trimMultiple(`
         --@----@--
         ----------
         ------@@--

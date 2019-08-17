@@ -1,9 +1,9 @@
-﻿import { trim } from './trim'
+﻿import { trimMultiple } from './trimMultiple'
 
 export const LF = `
 `
 
-export const emptyBoard = trim(`
+export const emptyBoard = trimMultiple(`
 ----------
 ----------
 ----------

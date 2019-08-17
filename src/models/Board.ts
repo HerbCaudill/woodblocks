@@ -4,6 +4,13 @@ import { LF } from '../lib/constants'
 // all boards are 10 x 10 for now
 export const N = 10
 
+interface BoardSquare {
+  filled: boolean
+  hover: boolean
+}
+
+
+
 export class Board {
   size: number
   rows: Array<Line>

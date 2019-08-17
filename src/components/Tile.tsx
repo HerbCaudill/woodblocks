@@ -24,8 +24,8 @@ export const Tile = ({ isFilled, location }: TileProps) => {
     accept: 'piece',
     drop: addPiece,
     collect: monitor => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.getItem() && canAddPiece(monitor.getItem().name),
+      isOver: monitor.isOver(),
+      canDrop: monitor.getItem() && canAddPiece(monitor.getItem().name),
       item: monitor.getItem(),
       offset: monitor.getClientOffset(),
     }),
@@ -33,7 +33,7 @@ export const Tile = ({ isFilled, location }: TileProps) => {
 
   const colors = {
     empty: 'rgba(0,0,0,5%)',
-    filled: 'rgba(0,0,255,10%)',
+    filled: 'rgba(0,0,255,40%)',
   }
 
   const styles = {

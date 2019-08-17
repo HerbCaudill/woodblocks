@@ -25,7 +25,7 @@ export const Piece = ({ name }: PieceProps) => {
 
   const colors = {
     off: 'transparent',
-    on: 'rgba(0,0,255,10%)',
+    on: 'rgba(0,0,255,50%)',
   }
 
   const styles = {

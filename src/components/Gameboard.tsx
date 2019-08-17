@@ -7,10 +7,14 @@ export const Gameboard = () => {
   const { boardSize, tileSize, board } = useGameState()
 
   const styles = {
+    wrapper: css({
+      
+    }),
     board: css({
       padding: '1em',
       background: 'rgba(0,0,0,2%)',
       width: tileSize * boardSize,
+      height: tileSize * boardSize,
     }),
     row: css({
       height: tileSize,

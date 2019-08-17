@@ -1,8 +1,8 @@
 ﻿import { LF } from './constants'
-import { trim } from 'lib/trim'
+import { trimMultiple } from 'lib/trimMultiple'
 
 export function toBooleanArray(s: string) {
-  return trim(s)
+  return trimMultiple(s)
     .split(LF)
     .map(row => row.split('').map(col => (col === '-' || col === ' ' ? false : true)))
 }
