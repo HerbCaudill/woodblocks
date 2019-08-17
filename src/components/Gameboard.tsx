@@ -7,9 +7,7 @@ export const Gameboard = () => {
   const { boardSize, tileSize, board } = useGameState()
 
   const styles = {
-    wrapper: css({
-      
-    }),
+    wrapper: css({}),
     board: css({
       padding: '1em',
       background: 'rgba(0,0,0,2%)',
@@ -28,7 +26,7 @@ export const Gameboard = () => {
       {board.rows.map((row, y) => (
         <div key={y} css={styles.row}>
           {row.map((cell, x) => (
-            <Tile key={x} location={[x, y]} isFilled={cell} />
+            <Tile key={x} location={[x, y]} isFilled={cell.filled} />
           ))}
         </div>
       ))}

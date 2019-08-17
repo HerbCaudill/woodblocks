@@ -1,15 +1,8 @@
-﻿import { toBooleanArray } from 'lib/toBooleanArray'
+﻿import { toCellArray } from '../lib/toCellArray'
 import { LF } from '../lib/constants'
 
 // all boards are 10 x 10 for now
 export const N = 10
-
-interface BoardSquare {
-  filled: boolean
-  hover: boolean
-}
-
-
 
 export class Board {
   size: number
@@ -19,7 +12,11 @@ export class Board {
     this.size = N
     this.rows = Array(N)
       .fill(null)
-      .map(_ => Array(N).fill(false))
+      .map(_ =>
+        Array(N).fill({
+          filled: false,
+        })
+      )
     if (s.length) this.fromString(s)
   }
 
@@ -28,14 +25,15 @@ export class Board {
     return this
   }
 
-  fromString = (s: string) => this.fromArray(toBooleanArray(s))
+  fromString = (s: string) => this.fromArray(toCellArray(s))
 
-  toString = () => this.rows.map(row => row.map(cell => (cell ? '@' : '-')).join('')).join(LF)
+  toString = () =>
+    this.rows.map(row => row.map(cell => (cell.filled ? '@' : '-')).join('')).join(LF)
 
   // determines whether the piece conflicts with existing pieces on the board
   noConflicts = (piece: Layout, [x, y]: Location) => {
     const conflicts = piece.map((row, row_index) =>
-      row.map((cell, col_index) => this.rows[row_index + y][col_index + x] && cell)
+      row.map((cell, col_index) => this.rows[row_index + y][col_index + x].filled && cell.filled)
     )
     // returns true if any element of `conflicts` is true
     return !conflicts.some(row => row.some(cell => cell))
@@ -57,9 +55,9 @@ export class Board {
   addPiece = (piece: Layout, [x, y]: Location) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
     piece.forEach((row, row_index) =>
-      row.forEach((cell, col_index) => {
-        const current = this.rows[row_index + y][col_index + x]
-        this.rows[row_index + y][col_index + x] = cell || current
+      row.forEach((pieceCell, col_index) => {
+        const boardCell = this.rows[row_index + y][col_index + x]
+        boardCell.filled = pieceCell.filled || boardCell.filled
       })
     )
     return this
@@ -69,15 +67,16 @@ export class Board {
   // (true = can be placed here, false = cannot be placed here)
   allowedLocations = (piece: Layout) =>
     this.rows.map((row, row_index) =>
-      row.map((cell, col_index) => !cell && this.canAddPiece(piece, [col_index, row_index]))
+      row.map((cell, col_index) => !cell.filled && this.canAddPiece(piece, [col_index, row_index]))
     )
 
   clearFilled = () => {
-    const isFilled = (arr: Line) => !arr.some(cell => cell === false)
+    const isFilled = (arr: Line) => !arr.some(cell => cell.filled === false)
 
     const clearRow = (row_index: number) =>
-      this.rows[row_index].forEach((_, i) => (this.rows[row_index][i] = false))
-    const clearColumn = (col_index: number) => this.rows.forEach(row => (row[col_index] = false))
+      this.rows[row_index].forEach((_, i) => (this.rows[row_index][i].filled = false))
+    const clearColumn = (col_index: number) =>
+      this.rows.forEach(row => (row[col_index].filled = false))
 
     // find filled rows
     const filledRows = this.rows
@@ -97,6 +96,11 @@ export class Board {
   }
 }
 
-export type Line = boolean[]
+export interface Cell {
+  filled: boolean
+  hover?: boolean
+}
+
+export type Line = Cell[]
 export type Layout = Line[]
 export type Location = [number, number]

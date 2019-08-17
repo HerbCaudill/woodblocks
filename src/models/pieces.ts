@@ -1,6 +1,6 @@
 ﻿import { Layout } from 'models/Board'
 import makeRandom from 'seed-random'
-import { toBooleanReducer } from './toBooleanReducer'
+import { toBooleanReducer } from '../lib/toCellReducer'
 
 export type PieceDictionary = {
   [key: string]: Layout

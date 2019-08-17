@@ -52,8 +52,23 @@ describe('Board', () => {
   })
 
   describe('toString', () => {
-    it('should render an empty board correctly ', () => {
+    it('empty board', () => {
       expect(new Board().toString()).toEqual(emptyBoard)
+    })
+
+    it('one cell', () => {
+      const str = trimMultiple(`
+         @---------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------`)
+      expect(new Board(str).toString()).toEqual(str)
     })
   })
 
