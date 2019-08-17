@@ -28,10 +28,10 @@ describe('Board', () => {
           ----------
           ----------`)
         expect(boardIsEmpty(board)).toBe(false)
-        expect(board.rows[0][0]).toBe(true)
-        expect(board.rows[1][0]).toBe(false)
-        expect(board.rows[0][1]).toBe(false)
-        expect(board.rows[1][1]).toBe(false)
+        expect(board.rows[0][0].filled).toBe(true)
+        expect(board.rows[1][0].filled).toBe(false)
+        expect(board.rows[0][1].filled).toBe(false)
+        expect(board.rows[1][1].filled).toBe(false)
       })
     })
 
@@ -68,6 +68,21 @@ describe('Board', () => {
          ----------
          ----------
          ----------`)
+      expect(new Board(str).toString()).toEqual(str)
+    })
+
+    it('multiple cells', () => {
+      const str = trimMultiple(`
+         @---------
+         ----------
+         ----@@@---
+         ------@---
+         ------@---
+         -----@@---
+         ----------
+         --------@-
+         --------@-
+         --------@-`)
       expect(new Board(str).toString()).toEqual(str)
     })
   })

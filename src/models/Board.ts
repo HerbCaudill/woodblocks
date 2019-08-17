@@ -13,9 +13,11 @@ export class Board {
     this.rows = Array(N)
       .fill(null)
       .map(_ =>
-        Array(N).fill({
-          filled: false,
-        })
+        Array(N)
+          .fill(null)
+          .map(_ => ({
+            filled: false,
+          }))
       )
     if (s.length) this.fromString(s)
   }
@@ -27,8 +29,7 @@ export class Board {
 
   fromString = (s: string) => this.fromArray(toCellArray(s))
 
-  toString = () =>
-    this.rows.map(row => row.map(cell => (cell.filled ? '@' : '-')).join('')).join(LF)
+  toString = () => this.rows.map(rowToText).join(LF)
 
   // determines whether the piece conflicts with existing pieces on the board
   noConflicts = (piece: Layout, [x, y]: Location) => {
@@ -54,8 +55,8 @@ export class Board {
   // returns the board if it can
   addPiece = (piece: Layout, [x, y]: Location) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
-    piece.forEach((row, row_index) =>
-      row.forEach((pieceCell, col_index) => {
+    piece.forEach((pieceRow, row_index) =>
+      pieceRow.forEach((pieceCell, col_index) => {
         const boardCell = this.rows[row_index + y][col_index + x]
         boardCell.filled = pieceCell.filled || boardCell.filled
       })
@@ -67,7 +68,9 @@ export class Board {
   // (true = can be placed here, false = cannot be placed here)
   allowedLocations = (piece: Layout) =>
     this.rows.map((row, row_index) =>
-      row.map((cell, col_index) => !cell.filled && this.canAddPiece(piece, [col_index, row_index]))
+      row.map((cell, col_index) => ({
+        filled: !cell.filled && this.canAddPiece(piece, [col_index, row_index]),
+      }))
     )
 
   clearFilled = () => {
@@ -95,6 +98,8 @@ export class Board {
     return this
   }
 }
+
+export const rowToText = (row: Line) => row.map(cell => (cell.filled ? '@' : '-')).join('')
 
 export interface Cell {
   filled: boolean
