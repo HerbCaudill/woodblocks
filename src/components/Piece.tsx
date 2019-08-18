@@ -3,25 +3,34 @@ import { css, jsx } from '@emotion/core'
 import { pieces } from 'models/pieces'
 import { useDrag } from 'react-dnd'
 import { useGameState } from 'context'
+import { Cell, Layout } from 'models/Board'
 
 interface PieceProps {
   name: keyof typeof pieces
 }
 
+export interface DraggablePiece {
+  type: string
+  name: string
+  piece: Layout
+}
+
 export const Piece = ({ name }: PieceProps) => {
+  const piece = pieces[name]
   const { tileSize } = useGameState()
 
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: 'piece',
       name,
+      piece,
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
   })
 
-  const pieceTileSize = tileSize / 2
+  const pieceTileSize = tileSize * 0.8
 
   const colors = {
     off: 'transparent',
@@ -40,15 +49,14 @@ export const Piece = ({ name }: PieceProps) => {
       display: 'flex',
       marginBottom: 2,
     }),
-    tile: (cell: boolean) =>
+    tile: (cell: Cell) =>
       css({
         width: pieceTileSize,
         height: pieceTileSize,
-        background: cell ? colors.on : colors.off,
+        background: cell.filled ? colors.on : colors.off,
         marginRight: 2,
       }),
   }
-  const piece = pieces[name]
 
   return (
     <div css={styles.piece} ref={drag}>

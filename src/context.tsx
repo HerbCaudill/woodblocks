@@ -1,5 +1,6 @@
 import { Board } from 'models/Board'
-import React from 'react'
+import React, { Reducer } from 'react'
+import { pieces } from 'models/pieces'
 
 export type GameState = {
   boardSize: number
@@ -7,8 +8,6 @@ export type GameState = {
   board: Board
   score: number
 }
-
-export type Action = { type: 'addPiece' } | { type: 'clearRow' }
 
 export type Dispatch = (action: Action) => void
 
@@ -28,20 +27,58 @@ export const GameStateContext = React.createContext<GameState | undefined>(undef
 
 export const GameDispatchContext = React.createContext<Dispatch | undefined>(undefined)
 
-export function stateReducer(state: GameState, action: Action) {
-  switch (action.type) {
+export interface Action {
+  type: string
+  payload: any
+}
+
+export const stateReducer: Reducer<GameState, Action> = (
+  state: GameState,
+  { type, payload }: Action
+) => {
+  console.log(type, JSON.stringify(payload))
+  switch (type) {
+    case 'hoverPiece': {
+      const {
+        pieceName,
+        location: [x, y],
+      } = payload
+      const board = state.board.clone()
+      board.clearHover()
+      board.addPiece(pieces[pieceName], [x, y], true)
+      return { ...state, board }
+    }
+
     case 'addPiece': {
-      return state
+      const {
+        pieceName,
+        location: [x, y],
+      } = payload
+      const board = state.board.clone()
+      board.clearHover()
+      board.addPiece(pieces[pieceName], [x, y])
+      return { ...state, board }
+    }
+
+    case 'clearHover': {
+      const board = state.board.clone()
+      board.clearHover()
+      return { ...state, board }
     }
 
     case 'clearRow': {
+      return state
+    }
+
+    default: {
       return state
     }
   }
 }
 
 export const GameStateProvider = ({ board = new Board(), children }: StateProviderProps) => {
-  const [state, dispatch] = React.useReducer(stateReducer, { ...defaultGameState, board: board })
+  const initialState = { ...defaultGameState, board: board }
+  const [state, dispatch] = React.useReducer(stateReducer, initialState)
   return (
     <GameStateContext.Provider value={state}>
       <GameDispatchContext.Provider value={dispatch}>{children}</GameDispatchContext.Provider>

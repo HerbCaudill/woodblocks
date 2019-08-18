@@ -27,6 +27,8 @@ export class Board {
     return this
   }
 
+  clone = () => new Board().fromArray(this.rows)
+
   fromString = (s: string) => this.fromArray(toCellArray(s))
 
   toString = () => this.rows.map(rowToText).join(LF)
@@ -53,16 +55,23 @@ export class Board {
 
   // tries to add piece at the given location; throws an error if it cannot be added,
   // returns the board if it can
-  addPiece = (piece: Layout, [x, y]: Location) => {
+  addPiece = (piece: Layout, [x, y]: Location, hover: boolean = false) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
     piece.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {
         const boardCell = this.rows[row_index + y][col_index + x]
-        boardCell.filled = pieceCell.filled || boardCell.filled
+        if (hover) {
+          // we're just hovering the piece, not adding it to the board
+          boardCell.hover = pieceCell.filled
+        } else {
+          boardCell.filled = pieceCell.filled || boardCell.filled
+        }
       })
     )
     return this
   }
+
+  clearHover = () => this.rows.forEach(row => row.forEach(cell => (cell.hover = false)))
 
   // layout showing where on the current board the given piece can be placed
   // (true = can be placed here, false = cannot be placed here)
@@ -99,7 +108,8 @@ export class Board {
   }
 }
 
-export const rowToText = (row: Line) => row.map(cell => (cell.filled ? '@' : '-')).join('')
+export const rowToText = (row: Line) =>
+  row.map(cell => (cell.filled ? '@' : cell.hover ? 'O' : '-')).join('')
 
 export interface Cell {
   filled: boolean

@@ -1,53 +1,56 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
-import { useGameState } from 'context'
+import { useGameDispatch, useGameState } from 'context'
+import { Location } from 'models/Board'
+import { useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { pieces } from 'models/pieces'
-import { Layout, Location } from 'models/Board'
+import { DraggablePiece } from './Piece'
 
 interface TileProps {
   isFilled: boolean
+  isHover: boolean
   location: Location
 }
 
-export const Tile = ({ isFilled, location }: TileProps) => {
+export const Tile = ({ isFilled, isHover, location }: TileProps) => {
   const { tileSize, board } = useGameState()
+  const dispatch = useGameDispatch()
+  const [hoverLocation, setHoverLocation] = useState<Location>()
 
-  const addPiece = () => {}
-
-  const canAddPiece = (name: string) => {
-    const piece = pieces[name] as Layout
-    return board.canAddPiece(piece, location) as boolean
-  }
-
-  const [{ isOver, canDrop, item, offset }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: 'piece',
-    drop: addPiece,
-    collect: monitor => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.getItem() && canAddPiece(monitor.getItem().name),
-      item: monitor.getItem(),
-      offset: monitor.getClientOffset(),
-    }),
+
+    drop: (item: DraggablePiece) =>
+      dispatch({ type: 'addPiece', payload: { pieceName: item.name, location } }),
+
+    hover: (item: DraggablePiece, monitor) => {
+      if (!hoverLocation || location[0] !== hoverLocation[0] || location[1] !== hoverLocation[1]) {
+        console.log('new location')
+        setHoverLocation(location)
+        if (monitor.canDrop())
+          dispatch({ type: 'hoverPiece', payload: { pieceName: item.name, location } })
+        else dispatch({ type: 'clearHover', payload: {} })
+      }
+    },
+
+    canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, location) as boolean,
   })
 
   const colors = {
     empty: 'rgba(0,0,0,5%)',
     filled: 'rgba(0,0,255,40%)',
+    hover: 'rgba(0,0,255,20%)',
   }
 
   const styles = {
     tile: css({
       width: tileSize,
       height: tileSize,
-      background: isFilled ? colors.filled : colors.empty,
+      background: isFilled ? colors.filled : isHover ? colors.hover : colors.empty,
       marginRight: 2,
+      transition: 'background .2s',
     }),
   }
 
-  return (
-    <div ref={drop} css={styles.tile}>
-      {isOver && <pre>{JSON.stringify({ canDrop, location, isOver, item, offset })}</pre>}
-    </div>
-  )
+  return <div ref={drop} css={styles.tile} />
 }

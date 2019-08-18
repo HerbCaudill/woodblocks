@@ -251,6 +251,63 @@ describe('Board', () => {
     })
   })
 
+  describe('addPiece (hover)', () => {
+    const hover = true
+
+    test('case 1', () => {
+      const board = new Board()
+
+      match(
+        board.addPiece(p1x1, [0, 0], hover),
+        `O---------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------`
+      )
+    })
+
+    test('case 2', () => {
+      const board = new Board().addPiece(p1x2, [0, 2], hover)
+      match(
+        board,
+        `----------
+         ----------
+         O---------
+         O---------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------
+         ----------`
+      )
+    })
+
+    test('case 3', () => {
+      const board = new Board()
+      board.addPiece(pL2ne, [3, 4], hover)
+      match(
+        board,
+        `----------
+         ----------
+         ----------
+         ----------
+         ---OO-----
+         ----O-----
+         ----------
+         ----------
+         ----------
+         ----------`
+      )
+    })
+  })
+
   describe('allowedLocations', () => {
     it('case 1', () => {
       const piece = p1x1
