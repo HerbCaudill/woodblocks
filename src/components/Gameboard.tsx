@@ -13,6 +13,7 @@ export const Gameboard = () => {
       width: tileSize * boardSize,
       height: tileSize * boardSize,
       marginBottom: 20,
+      marginTop: 20,
     }),
     row: css({
       height: tileSize,
@@ -23,11 +24,12 @@ export const Gameboard = () => {
       fontSize: 36,
       fontFamily: 'sans-serif',
       fontWeight: 'bold',
+      marginBottom: 20,
     }),
   }
 
   return (
-    <div>
+    <div css={{ padding: 20 }}>
       <div css={styles.score}>{score}</div>
       <div css={styles.board}>
         {board.rows.map((row, y) => (
