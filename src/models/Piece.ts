@@ -2,7 +2,6 @@
 import { textToRow } from 'lib/toCellArray'
 import { trim } from 'lib/trim'
 import { Cell } from 'models/Board'
-import makeRandom from 'seed-random'
 
 export type PieceDictionary = {
   [key: string]: Piece
@@ -71,14 +70,13 @@ export const shapes = {
 
 export type PieceName = keyof typeof shapes
 
-export const randomPieceName = (randomSeed: string): PieceName => {
-  const random = makeRandom(randomSeed)
+export const randomPieceName = (random: () => number = Math.random): PieceName => {
   const keys = Object.keys(pieces)
   const name = keys[Math.floor(random() * keys.length)]
   return name
 }
 
-export const randomPiece = (randomSeed: string) => new Piece(randomPieceName(randomSeed))
+export const randomPiece = (random?: () => number) => new Piece(randomPieceName(random))
 
 export class Piece {
   rows: Cell[][]

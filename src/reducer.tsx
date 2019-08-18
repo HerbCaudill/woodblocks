@@ -1,10 +1,18 @@
 ﻿import { Reducer } from 'react'
 import { Action, GameState, newPieces } from './context'
+import makeRandom from 'seed-random'
+
 export const reducer: Reducer<GameState, Action> = (
   state: GameState,
   { type, payload }: Action
 ) => {
   switch (type) {
+    case 'randomize': {
+      const { randomSeed } = payload
+      const random = makeRandom(randomSeed)
+      return { ...state, random }
+    }
+
     case 'addPiece': {
       const {
         piece,
@@ -15,7 +23,7 @@ export const reducer: Reducer<GameState, Action> = (
       // added piece is no longer available
       const availablePieces = state.availablePieces.filter(p => p.id !== piece.id)
       // refill available pieces if they're all gone
-      if (availablePieces.length === 0) availablePieces.push(...newPieces(Date().toString()))
+      if (availablePieces.length === 0) availablePieces.push(...newPieces())
       return { ...state, board, availablePieces }
     }
 

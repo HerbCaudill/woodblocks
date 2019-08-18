@@ -2,8 +2,10 @@ import { Board, Position } from 'models/Board'
 import React from 'react'
 import { reducer } from './reducer'
 import { Piece, randomPiece } from 'models/Piece'
+import makeRandom from 'seed-random'
 
 export type GameState = {
+  random: () => number
   boardSize: number
   tileSize: number
   board: Board
@@ -19,16 +21,16 @@ export interface StateProviderProps {
   children: React.ReactNode
 }
 
-const newPiece = (id: string | number, randomSeed = id.toString()) => {
-  const piece = randomPiece(randomSeed)
+const newPiece = (id: string | number, random?: () => number) => {
+  const piece = randomPiece(random)
   piece.id = id.toString()
   return piece
 }
 
-export const newPieces = (randomSeed?: string) =>
-  [1, 2, 3].map(id => newPiece(id, `${randomSeed}-${id}`))
+export const newPieces = (random?: () => number) => [1, 2, 3].map(id => newPiece(id, random))
 
 export const defaultGameState: GameState = {
+  random: makeRandom(''),
   boardSize: 10,
   tileSize: 50,
   board: new Board(),

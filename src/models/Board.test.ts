@@ -256,7 +256,6 @@ describe('Board', () => {
 
     test('case 1', () => {
       const board = new Board()
-
       match(
         board.addPiece(p1x1, [0, 0], hover),
         `O---------
