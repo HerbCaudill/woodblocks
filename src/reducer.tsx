@@ -1,6 +1,8 @@
-﻿import { Reducer } from 'react'
-import { Action, GameState, newPieces } from './context'
+﻿import { Board } from 'models/Board'
+import { Piece } from 'models/Piece'
+import { Reducer } from 'react'
 import makeRandom from 'seed-random'
+import { Action, GameState, newPieces } from './context'
 
 export const reducer: Reducer<GameState, Action> = (
   state: GameState,
@@ -30,26 +32,23 @@ export const reducer: Reducer<GameState, Action> = (
       // update score
       const score = state.score + piece.points
 
-      return { ...state, board, availablePieces, score }
+      // is game over?
+      const gameOver = isGameOver(board, availablePieces)
+
+      return { ...state, board, availablePieces, score, gameOver }
     }
 
     case 'hoverPiece': {
       const { piece, position } = payload
-      if (
-        state.hoverPosition === undefined ||
-        (state.hoverPosition[0] !== position[0] || state.hoverPosition[1] !== position[1])
-      ) {
-        const board = state.board.clone()
-        board.addPiece(piece, position, true)
-        return { ...state, board, hoverPosition: position }
-      }
-      return state
+      const board = state.board.clone()
+      board.addPiece(piece, position, true)
+      return { ...state, board }
     }
 
     case 'clearHover': {
       const board = state.board.clone()
       board.clearHover()
-      return { ...state, board, hoverPosition: undefined }
+      return { ...state, board }
     }
 
     default: {
@@ -57,3 +56,10 @@ export const reducer: Reducer<GameState, Action> = (
     }
   }
 }
+
+const isGameOver = (board: Board, pieces: Piece[]) => {
+  const possibleMoves = pieces.map(piece => board.allowedPositions(piece).length)
+  return sum(possibleMoves) === 0
+}
+
+const sum = (arr: number[]) => arr.reduce((total, n) => total + n, 0)

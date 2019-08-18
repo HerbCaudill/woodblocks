@@ -15,9 +15,10 @@ export interface DraggablePiece {
 }
 
 export const Piece = ({ piece }: PieceProps) => {
-  const { tileSize } = useGameState()
+  const { tileSize, gameOver } = useGameState()
 
   const [{ isDragging }, drag] = useDrag({
+    canDrag: !gameOver,
     item: { type: 'piece', piece },
     collect: monitor => ({ isDragging: monitor.isDragging() }),
   })

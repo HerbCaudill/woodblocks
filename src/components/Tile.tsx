@@ -12,7 +12,7 @@ interface TileProps {
 }
 
 export const Tile = ({ isFilled, isHover, position }: TileProps) => {
-  const { tileSize, board } = useGameState()
+  const { tileSize, board, gameOver } = useGameState()
   const dispatch = useGameDispatch()
 
   const [, drop] = useDrop({
@@ -23,7 +23,7 @@ export const Tile = ({ isFilled, isHover, position }: TileProps) => {
     },
 
     hover: (item: DraggablePiece, monitor) => {
-      if (monitor.canDrop())
+      if (monitor.canDrop() && !isHover)
         dispatch({ type: 'hoverPiece', payload: { piece: item.piece, position } })
     },
 
@@ -44,9 +44,13 @@ export const Tile = ({ isFilled, isHover, position }: TileProps) => {
       height: tileSize,
       background: isFilled ? colors.filled : isHover ? colors.hover : colors.empty,
       marginRight: 2,
-      transition: 'background .5s',
+      transition: 'background .2s',
     }),
   }
 
-  return <div ref={drop} css={styles.tile} onDragLeave={clearHover} />
+  return gameOver ? (
+    <div css={styles.tile} />
+  ) : (
+    <div ref={drop} css={styles.tile} onDragLeave={clearHover} />
+  )
 }

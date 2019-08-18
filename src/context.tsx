@@ -10,8 +10,8 @@ export type GameState = {
   tileSize: number
   board: Board
   score: number
-  hoverPosition: Position | undefined
   availablePieces: Piece[]
+  gameOver: boolean
 }
 
 export type Dispatch = (action: Action) => void
@@ -35,8 +35,8 @@ export const defaultGameState: GameState = {
   tileSize: 50,
   board: new Board(),
   score: 0,
-  hoverPosition: undefined,
   availablePieces: newPieces(),
+  gameOver: false,
 }
 
 export const GameStateContext = React.createContext<GameState | undefined>(undefined)

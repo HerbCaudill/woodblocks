@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/core'
 import { useGameState, useGameDispatch } from 'context'
 
 export const Bot = () => {
-  const { board, availablePieces, random } = useGameState()
+  const { board, availablePieces, random, gameOver } = useGameState()
   const dispatch = useGameDispatch()
 
   const styles = {
@@ -26,15 +26,23 @@ export const Bot = () => {
   }
 
   const play = () => {
-    const piece = availablePieces[0]
-    const allowedPositions = board.allowedPositions(piece)
-    const position = allowedPositions[Math.floor(random() * allowedPositions.length)]
-    dispatch({ type: 'addPiece', payload: { piece, position } })
+    // find the first piece that has at least one legal move
+    const piece = availablePieces.find(p => board.allowedPositions(p).length > 0)
+    if (piece !== undefined) {
+      const allowedPositions = board.allowedPositions(piece)
+      // pick one at random
+      const position = allowedPositions![Math.floor(random() * allowedPositions.length)]
+      dispatch({ type: 'addPiece', payload: { piece, position } })
+    } else {
+      // game is over, reducer should have caught it already
+    }
   }
 
   return (
-    <button css={styles.button} onClick={play}>
-      Play
-    </button>
+    !gameOver && (
+      <button css={styles.button} onClick={play}>
+        Play
+      </button>
+    )
   )
 }
