@@ -26,7 +26,12 @@ export const Gameboard = () => {
       {board.rows.map((row, y) => (
         <div key={y} css={styles.row}>
           {row.map((cell, x) => (
-            <Tile key={x} location={[x, y]} isFilled={cell.filled === true} isHover={cell.hover === true} />
+            <Tile
+              key={x}
+              position={[x, y]}
+              isFilled={cell.filled === true}
+              isHover={cell.hover === true}
+            />
           ))}
         </div>
       ))}

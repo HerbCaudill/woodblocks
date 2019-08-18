@@ -6,28 +6,24 @@ import { useGameState } from 'context'
 import { Cell, Layout } from 'models/Board'
 
 interface PieceProps {
+  id: number
   name: keyof typeof pieces
 }
 
 export interface DraggablePiece {
   type: string
+  id: number
   name: string
   piece: Layout
 }
 
-export const Piece = ({ name }: PieceProps) => {
+export const Piece = ({ id, name }: PieceProps) => {
   const piece = pieces[name]
   const { tileSize } = useGameState()
 
   const [{ isDragging }, drag] = useDrag({
-    item: {
-      type: 'piece',
-      name,
-      piece,
-    },
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    item: { type: 'piece', id, name, piece },
+    collect: monitor => ({ isDragging: monitor.isDragging() }),
   })
 
   const pieceTileSize = tileSize * 0.8
@@ -42,7 +38,7 @@ export const Piece = ({ name }: PieceProps) => {
       cursor: 'pointer',
       padding: 2,
       margin: 'auto',
-      opacity: isDragging ? 0.5 : 1,
+      opacity: isDragging ? 0 : 1,
     }),
     row: css({
       height: pieceTileSize,

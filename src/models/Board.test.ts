@@ -2,7 +2,7 @@
 import { boardIsEmpty } from '../lib/boardIsEmpty'
 import { emptyBoard } from '../lib/constants'
 import { match } from '../lib/match'
-import { trimMultiple } from '../lib/trimMultiple'
+import { trim } from '../lib/trim'
 import { pieces } from './pieces'
 
 const { p1x1, p1x2, p1x5, p5x1, pL2ne, pL2nw, pL3ne } = pieces
@@ -57,7 +57,7 @@ describe('Board', () => {
     })
 
     it('one cell', () => {
-      const str = trimMultiple(`
+      const str = trim(`
          @---------
          ----------
          ----------
@@ -72,7 +72,7 @@ describe('Board', () => {
     })
 
     it('multiple cells', () => {
-      const str = trimMultiple(`
+      const str = trim(`
          @---------
          ----------
          ----@@@---
@@ -308,7 +308,7 @@ describe('Board', () => {
     })
   })
 
-  describe('allowedLocations', () => {
+  describe('allowedPositions', () => {
     it('case 1', () => {
       const piece = p1x1
       const board = new Board(`
@@ -322,7 +322,7 @@ describe('Board', () => {
         ----------
         ----------
         ----------`)
-      const allowed = board.allowedLocations(piece)
+      const allowed = board.allowedPositions(piece)
       match(
         new Board().fromArray(allowed),
         `
@@ -353,10 +353,10 @@ describe('Board', () => {
         -@@@@@@@@@
         -@@@@@@@@@
         ----------`)
-      const allowed = board.allowedLocations(piece)
+      const allowed = board.allowedPositions(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
-        trimMultiple(`
+        trim(`
         -@@@@@----
         ----@@----
         ----@@----
@@ -385,10 +385,10 @@ describe('Board', () => {
         -@@@@@@@@@
         ----------
         `)
-      const allowed = board.allowedLocations(piece)
+      const allowed = board.allowedPositions(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
-        trimMultiple(`
+        trim(`
         --@----@--
         ----------
         ------@@--

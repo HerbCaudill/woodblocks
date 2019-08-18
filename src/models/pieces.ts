@@ -1,6 +1,6 @@
 ﻿import { Layout } from 'models/Board'
 import makeRandom from 'seed-random'
-import { toBooleanReducer } from '../lib/toCellReducer'
+import { toCellReducer } from '../lib/toCellReducer'
 
 export type PieceDictionary = {
   [key: string]: Layout
@@ -67,7 +67,7 @@ export const pieces_s = {
          @@@`,
 } as { [key: string]: string }
 
-export const pieces = Object.keys(pieces_s).reduce(toBooleanReducer, {} as PieceDictionary)
+export const pieces = Object.keys(pieces_s).reduce(toCellReducer, {} as PieceDictionary)
 
 export const randomPiece = (randomSeed: string) => {
   const random = makeRandom(randomSeed)

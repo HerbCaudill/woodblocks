@@ -10,7 +10,7 @@ interface GameProps {
 }
 
 export const Game = ({ randomSeed = '' }: GameProps) => {
-  const { boardSize, tileSize } = useGameState()
+  const { boardSize, tileSize, availablePieces } = useGameState()
 
   const styles = {
     game: css({}),
@@ -27,9 +27,9 @@ export const Game = ({ randomSeed = '' }: GameProps) => {
     <div css={styles.game}>
       <Gameboard />
       <div css={styles.pieces}>
-        <Piece name={randomPiece(`${randomSeed}-1`)} />
-        <Piece name={randomPiece(`${randomSeed}-2`)} />
-        <Piece name={randomPiece(`${randomSeed}-3`)} />
+        {Object.keys(availablePieces).map(d => (
+          <Piece key={d} id={d} name={randomPiece(`${randomSeed}-${d}`)} />
+        ))}
       </div>
     </div>
   )

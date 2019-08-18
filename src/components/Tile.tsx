@@ -1,40 +1,38 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import { useGameDispatch, useGameState } from 'context'
-import { Location } from 'models/Board'
-import { useState } from 'react'
+import { Position } from 'models/Board'
 import { useDrop } from 'react-dnd'
 import { DraggablePiece } from './Piece'
 
 interface TileProps {
   isFilled: boolean
   isHover: boolean
-  location: Location
+  position: Position
 }
 
-export const Tile = ({ isFilled, isHover, location }: TileProps) => {
+export const Tile = ({ isFilled, isHover, position }: TileProps) => {
   const { tileSize, board } = useGameState()
   const dispatch = useGameDispatch()
-  const [hoverLocation, setHoverLocation] = useState<Location>()
 
   const [, drop] = useDrop({
     accept: 'piece',
 
     drop: (item: DraggablePiece) =>
-      dispatch({ type: 'addPiece', payload: { pieceName: item.name, location } }),
+      dispatch({ type: 'addPiece', payload: { pieceName: item.name, position } }),
 
     hover: (item: DraggablePiece, monitor) => {
-      if (!hoverLocation || location[0] !== hoverLocation[0] || location[1] !== hoverLocation[1]) {
-        console.log('new location')
-        setHoverLocation(location)
-        if (monitor.canDrop())
-          dispatch({ type: 'hoverPiece', payload: { pieceName: item.name, location } })
-        else dispatch({ type: 'clearHover', payload: {} })
-      }
+      if (monitor.canDrop())
+        dispatch({ type: 'hoverPiece', payload: { pieceName: item.name, position } })
     },
 
-    canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, location) as boolean,
+    canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, position) as boolean,
   })
+
+  const clearHover = () => {
+    console.log('mouseout')
+    dispatch({ type: 'clearHover', payload: {} })
+  }
 
   const colors = {
     empty: 'rgba(0,0,0,5%)',
@@ -48,9 +46,9 @@ export const Tile = ({ isFilled, isHover, location }: TileProps) => {
       height: tileSize,
       background: isFilled ? colors.filled : isHover ? colors.hover : colors.empty,
       marginRight: 2,
-      transition: 'background .2s',
+      transition: 'background .5s',
     }),
   }
 
-  return <div ref={drop} css={styles.tile} />
+  return <div ref={drop} css={styles.tile} onDragLeave={clearHover} />
 }

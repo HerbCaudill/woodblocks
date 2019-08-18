@@ -1,6 +1,6 @@
 ﻿import { Board } from '../models/Board'
-import { trimMultiple } from './trimMultiple'
+import { trim } from './trim'
 
 export const match = (board: Board, s: string) => {
-  expect(board.toString()).toEqual(trimMultiple(s))
+  expect(board.toString()).toEqual(trim(s))
 }

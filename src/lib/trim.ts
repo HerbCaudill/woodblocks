@@ -1,7 +1,7 @@
 ﻿const LF = `
 `
 
-export const trimMultiple = (s: string) =>
+export const trim = (s: string) =>
   s
     .trim()
     .split(LF)

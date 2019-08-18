@@ -1,8 +1,8 @@
 ﻿import { LF } from './constants'
-import { trimMultiple } from 'lib/trimMultiple'
+import { trim } from 'lib/trim'
 
 export const toCellArray = (s: string) =>
-  trimMultiple(s)
+  trim(s)
     .split(LF)
     .map(textToRow)
 

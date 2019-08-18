@@ -34,7 +34,7 @@ export class Board {
   toString = () => this.rows.map(rowToText).join(LF)
 
   // determines whether the piece conflicts with existing pieces on the board
-  noConflicts = (piece: Layout, [x, y]: Location) => {
+  noConflicts = (piece: Layout, [x, y]: Position) => {
     const conflicts = piece.map((row, row_index) =>
       row.map((cell, col_index) => this.rows[row_index + y][col_index + x].filled && cell.filled)
     )
@@ -43,19 +43,19 @@ export class Board {
   }
 
   // determines whether the piece fits entirely within the boundaries of the board
-  pieceFits = (piece: Layout, [x, y]: Location) => {
+  pieceFits = (piece: Layout, [x, y]: Position) => {
     const height = piece.length
     const width = Math.max(...piece.map(row => row.length))
     return y + height <= N && x + width <= N
   }
 
   // returns true if there are no conflicts, and the piece fits within the boundaries of the board
-  canAddPiece = (piece: Layout, [x, y]: Location) =>
+  canAddPiece = (piece: Layout, [x, y]: Position) =>
     this.pieceFits(piece, [x, y]) && this.noConflicts(piece, [x, y])
 
-  // tries to add piece at the given location; throws an error if it cannot be added,
+  // tries to add piece at the given position; throws an error if it cannot be added,
   // returns the board if it can
-  addPiece = (piece: Layout, [x, y]: Location, hover: boolean = false) => {
+  addPiece = (piece: Layout, [x, y]: Position, hover: boolean = false) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
     piece.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {
@@ -65,6 +65,7 @@ export class Board {
           boardCell.hover = pieceCell.filled
         } else {
           boardCell.filled = pieceCell.filled || boardCell.filled
+          this.clearFilled()
         }
       })
     )
@@ -75,7 +76,7 @@ export class Board {
 
   // layout showing where on the current board the given piece can be placed
   // (true = can be placed here, false = cannot be placed here)
-  allowedLocations = (piece: Layout) =>
+  allowedPositions = (piece: Layout) =>
     this.rows.map((row, row_index) =>
       row.map((cell, col_index) => ({
         filled: !cell.filled && this.canAddPiece(piece, [col_index, row_index]),
@@ -118,4 +119,4 @@ export interface Cell {
 
 export type Line = Cell[]
 export type Layout = Line[]
-export type Location = [number, number]
+export type Position = [number, number]

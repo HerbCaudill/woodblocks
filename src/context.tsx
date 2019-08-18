@@ -1,12 +1,14 @@
-import { Board } from 'models/Board'
-import React, { Reducer } from 'react'
-import { pieces } from 'models/pieces'
+import { Board, Position } from 'models/Board'
+import React from 'react'
+import { reducer } from './reducer'
 
 export type GameState = {
   boardSize: number
   tileSize: number
   board: Board
   score: number
+  hoverPosition: Position | undefined
+  availablePieces: { [key: number]: boolean }
 }
 
 export type Dispatch = (action: Action) => void
@@ -21,10 +23,11 @@ export const defaultGameState: GameState = {
   tileSize: 50,
   board: new Board(),
   score: 0,
+  hoverPosition: undefined,
+  availablePieces: { 1: true, 2: true, 3: true },
 }
 
 export const GameStateContext = React.createContext<GameState | undefined>(undefined)
-
 export const GameDispatchContext = React.createContext<Dispatch | undefined>(undefined)
 
 export interface Action {
@@ -32,53 +35,9 @@ export interface Action {
   payload: any
 }
 
-export const stateReducer: Reducer<GameState, Action> = (
-  state: GameState,
-  { type, payload }: Action
-) => {
-  console.log(type, JSON.stringify(payload))
-  switch (type) {
-    case 'hoverPiece': {
-      const {
-        pieceName,
-        location: [x, y],
-      } = payload
-      const board = state.board.clone()
-      board.clearHover()
-      board.addPiece(pieces[pieceName], [x, y], true)
-      return { ...state, board }
-    }
-
-    case 'addPiece': {
-      const {
-        pieceName,
-        location: [x, y],
-      } = payload
-      const board = state.board.clone()
-      board.clearHover()
-      board.addPiece(pieces[pieceName], [x, y])
-      return { ...state, board }
-    }
-
-    case 'clearHover': {
-      const board = state.board.clone()
-      board.clearHover()
-      return { ...state, board }
-    }
-
-    case 'clearRow': {
-      return state
-    }
-
-    default: {
-      return state
-    }
-  }
-}
-
 export const GameStateProvider = ({ board = new Board(), children }: StateProviderProps) => {
   const initialState = { ...defaultGameState, board: board }
-  const [state, dispatch] = React.useReducer(stateReducer, initialState)
+  const [state, dispatch] = React.useReducer(reducer, initialState)
   return (
     <GameStateContext.Provider value={state}>
       <GameDispatchContext.Provider value={dispatch}>{children}</GameDispatchContext.Provider>
