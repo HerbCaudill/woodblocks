@@ -1,7 +1,7 @@
 import { Board, Position } from 'models/Board'
 import React from 'react'
 import { reducer } from './reducer'
-import { Piece, randomPiece } from 'models/pieces'
+import { Piece, randomPiece } from 'models/Piece'
 
 export type GameState = {
   boardSize: number
@@ -9,7 +9,7 @@ export type GameState = {
   board: Board
   score: number
   hoverPosition: Position | undefined
-  availablePieces: { [key: string]: Piece }
+  availablePieces: Piece[]
 }
 
 export type Dispatch = (action: Action) => void
@@ -19,11 +19,14 @@ export interface StateProviderProps {
   children: React.ReactNode
 }
 
-const newPiece = (id: string) => {
-  const piece = randomPiece(id)
-  piece.id = id
+const newPiece = (id: string | number, randomSeed = id.toString()) => {
+  const piece = randomPiece(randomSeed)
+  piece.id = id.toString()
   return piece
 }
+
+export const newPieces = (randomSeed?: string) =>
+  [1, 2, 3].map(id => newPiece(id, `${randomSeed}-${id}`))
 
 export const defaultGameState: GameState = {
   boardSize: 10,
@@ -31,13 +34,8 @@ export const defaultGameState: GameState = {
   board: new Board(),
   score: 0,
   hoverPosition: undefined,
-  availablePieces: ['1', '2', '3'].reduce(
-    (result, id) => ({ ...result, [id]: newPiece(id) }),
-    {} as { [key: string]: Piece }
-  ),
+  availablePieces: newPieces(),
 }
-
-console.log(defaultGameState)
 
 export const GameStateContext = React.createContext<GameState | undefined>(undefined)
 export const GameDispatchContext = React.createContext<Dispatch | undefined>(undefined)

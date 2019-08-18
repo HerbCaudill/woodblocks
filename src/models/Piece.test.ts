@@ -1,4 +1,4 @@
-﻿import { pieces } from './pieces'
+﻿import { pieces } from './Piece'
 import { rowToText, Line } from './Board'
 
 describe('pieces', () => {

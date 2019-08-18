@@ -1,5 +1,5 @@
 ﻿import { Reducer } from 'react'
-import { Action, GameState } from './context'
+import { Action, GameState, newPieces } from './context'
 export const reducer: Reducer<GameState, Action> = (
   state: GameState,
   { type, payload }: Action
@@ -13,9 +13,10 @@ export const reducer: Reducer<GameState, Action> = (
       const board = state.board.clone()
       board.clearHover()
       board.addPiece(piece, [x, y])
-      const availablePieces = { ...state.availablePieces }
-      delete availablePieces[piece.id]
-      console.log(availablePieces)
+      // added piece is no longer available
+      const availablePieces = state.availablePieces.filter(p => p.id !== piece.id)
+      // refill available pieces if they're all gone
+      if (availablePieces.length === 0) availablePieces.push(...newPieces(Date().toString()))
       return { ...state, board, availablePieces }
     }
 

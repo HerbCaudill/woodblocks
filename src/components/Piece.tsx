@@ -2,7 +2,7 @@
 import { css, jsx } from '@emotion/core'
 import { useGameState } from 'context'
 import { Cell } from 'models/Board'
-import { Piece as PieceModel } from 'models/pieces'
+import { Piece as PieceModel } from 'models/Piece'
 import { useDrag } from 'react-dnd'
 
 interface PieceProps {

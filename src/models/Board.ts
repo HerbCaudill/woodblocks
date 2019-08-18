@@ -1,6 +1,6 @@
 ﻿import { toCellArray } from '../lib/toCellArray'
 import { LF } from '../lib/constants'
-import { Piece } from './pieces'
+import { Piece } from './Piece'
 
 // all boards are 10 x 10 for now
 export const N = 10
