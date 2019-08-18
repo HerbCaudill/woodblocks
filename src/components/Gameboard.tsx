@@ -9,10 +9,10 @@ export const Gameboard = () => {
   const styles = {
     wrapper: css({}),
     board: css({
-      padding: '1em',
-      background: 'rgba(0,0,0,2%)',
+      padding: 0,
       width: tileSize * boardSize,
       height: tileSize * boardSize,
+      marginBottom: 20,
     }),
     row: css({
       height: tileSize,
