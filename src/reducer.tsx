@@ -20,11 +20,17 @@ export const reducer: Reducer<GameState, Action> = (
       } = payload
       const board = state.board.clone()
       board.addPiece(piece, [x, y])
+
       // added piece is no longer available
       const availablePieces = state.availablePieces.filter(p => p.id !== piece.id)
+
       // refill available pieces if they're all gone
       if (availablePieces.length === 0) availablePieces.push(...newPieces())
-      return { ...state, board, availablePieces }
+
+      // update score
+      const score = state.score + piece.points
+
+      return { ...state, board, availablePieces, score }
     }
 
     case 'hoverPiece': {
@@ -44,11 +50,6 @@ export const reducer: Reducer<GameState, Action> = (
       const board = state.board.clone()
       board.clearHover()
       return { ...state, board, hoverPosition: undefined }
-    }
-
-    case 'addPoints': {
-      const { points } = payload
-      return { ...state, score: state.score + points }
     }
 
     default: {

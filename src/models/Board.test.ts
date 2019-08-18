@@ -321,7 +321,7 @@ describe('Board', () => {
         ----------
         ----------
         ----------`)
-      const allowed = board.allowedPositions(piece)
+      const allowed = board.allowedPositionsMap(piece)
       match(
         new Board().fromArray(allowed),
         `
@@ -352,7 +352,7 @@ describe('Board', () => {
         -@@@@@@@@@
         -@@@@@@@@@
         ----------`)
-      const allowed = board.allowedPositions(piece)
+      const allowed = board.allowedPositionsMap(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
         trim(`
@@ -384,7 +384,7 @@ describe('Board', () => {
         -@@@@@@@@@
         ----------
         `)
-      const allowed = board.allowedPositions(piece)
+      const allowed = board.allowedPositionsMap(piece)
       const allowedMap = new Board().fromArray(allowed).toString()
       expect(allowedMap).toEqual(
         trim(`

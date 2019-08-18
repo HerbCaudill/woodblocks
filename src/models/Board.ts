@@ -78,12 +78,22 @@ export class Board {
 
   // layout showing where on the current board the given piece can be placed
   // (true = can be placed here, false = cannot be placed here)
-  allowedPositions = (piece: Piece) =>
+  allowedPositionsMap = (piece: Piece) =>
     this.rows.map((row, row_index) =>
       row.map((cell, col_index) => ({
         filled: !cell.filled && this.canAddPiece(piece, [col_index, row_index]),
       }))
     )
+
+  allowedPositions = (piece: Piece) => {
+    const result = [] as [number, number][]
+    this.rows.forEach((row, y) =>
+      row.forEach((cell, x) => {
+        if (!cell.filled && this.canAddPiece(piece, [x, y])) result.push([x, y])
+      })
+    )
+    return result
+  }
 
   clearFilled = () => {
     const isFilled = (arr: Line) => !arr.some(cell => cell.filled === false)

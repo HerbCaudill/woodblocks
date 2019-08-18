@@ -4,14 +4,12 @@ import { useGameState } from 'context'
 import { Tile } from './Tile'
 
 export const Gameboard = () => {
-  const { score, boardSize, tileSize, board } = useGameState()
+  const { tileSize, board } = useGameState()
 
   const styles = {
     wrapper: css({}),
     board: css({
       padding: 0,
-      width: tileSize * boardSize,
-      height: tileSize * boardSize,
       marginBottom: 20,
       marginTop: 20,
     }),
@@ -20,17 +18,10 @@ export const Gameboard = () => {
       display: 'flex',
       marginBottom: 2,
     }),
-    score: css({
-      fontSize: 36,
-      fontFamily: 'sans-serif',
-      fontWeight: 'bold',
-      marginBottom: 20,
-    }),
   }
 
   return (
-    <div css={{ padding: 20 }}>
-      <div css={styles.score}>{score}</div>
+    <div>
       <div css={styles.board}>
         {board.rows.map((row, y) => (
           <div key={y} css={styles.row}>
