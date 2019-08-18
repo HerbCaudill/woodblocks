@@ -18,8 +18,10 @@ export const Tile = ({ isFilled, isHover, position }: TileProps) => {
   const [, drop] = useDrop({
     accept: 'piece',
 
-    drop: (item: DraggablePiece) =>
-      dispatch({ type: 'addPiece', payload: { piece: item.piece, position } }),
+    drop: (item: DraggablePiece) => {
+      dispatch({ type: 'addPiece', payload: { piece: item.piece, position } })
+      dispatch({ type: 'addPoints', payload: { points: item.piece.points } })
+    },
 
     hover: (item: DraggablePiece, monitor) => {
       if (monitor.canDrop())

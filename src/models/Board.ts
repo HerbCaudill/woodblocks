@@ -58,6 +58,7 @@ export class Board {
   // returns the board if it can
   addPiece = (piece: Piece, [x, y]: Position, hover: boolean = false) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
+    this.clearHover()
     piece.rows.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {
         const boardCell = this.rows[row_index + y][col_index + x]

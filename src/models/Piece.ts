@@ -92,7 +92,9 @@ export class Piece {
     this.name = name
   }
 
-  points = () => this.rows.flat().filter(cell => cell.filled).length
+  get points() {
+    return this.rows.flat().filter(cell => cell.filled).length
+  }
 }
 
 export const pieces = Object.keys(shapes).reduce(
