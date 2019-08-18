@@ -1,6 +1,7 @@
 import { Board, Position } from 'models/Board'
 import React from 'react'
 import { reducer } from './reducer'
+import { Piece, randomPiece } from 'models/pieces'
 
 export type GameState = {
   boardSize: number
@@ -8,7 +9,7 @@ export type GameState = {
   board: Board
   score: number
   hoverPosition: Position | undefined
-  availablePieces: { [key: number]: boolean }
+  availablePieces: { [key: string]: Piece }
 }
 
 export type Dispatch = (action: Action) => void
@@ -18,14 +19,25 @@ export interface StateProviderProps {
   children: React.ReactNode
 }
 
+const newPiece = (id: string) => {
+  const piece = randomPiece(id)
+  piece.id = id
+  return piece
+}
+
 export const defaultGameState: GameState = {
   boardSize: 10,
   tileSize: 50,
   board: new Board(),
   score: 0,
   hoverPosition: undefined,
-  availablePieces: { 1: true, 2: true, 3: true },
+  availablePieces: ['1', '2', '3'].reduce(
+    (result, id) => ({ ...result, [id]: newPiece(id) }),
+    {} as { [key: string]: Piece }
+  ),
 }
+
+console.log(defaultGameState)
 
 export const GameStateContext = React.createContext<GameState | undefined>(undefined)
 export const GameDispatchContext = React.createContext<Dispatch | undefined>(undefined)

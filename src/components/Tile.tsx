@@ -19,20 +19,17 @@ export const Tile = ({ isFilled, isHover, position }: TileProps) => {
     accept: 'piece',
 
     drop: (item: DraggablePiece) =>
-      dispatch({ type: 'addPiece', payload: { pieceName: item.name, position } }),
+      dispatch({ type: 'addPiece', payload: { piece: item.piece, position } }),
 
     hover: (item: DraggablePiece, monitor) => {
       if (monitor.canDrop())
-        dispatch({ type: 'hoverPiece', payload: { pieceName: item.name, position } })
+        dispatch({ type: 'hoverPiece', payload: { piece: item.piece, position } })
     },
 
-    canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, position) as boolean,
+    canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, position),
   })
 
-  const clearHover = () => {
-    console.log('mouseout')
-    dispatch({ type: 'clearHover', payload: {} })
-  }
+  const clearHover = () => dispatch({ type: 'clearHover', payload: {} })
 
   const colors = {
     empty: 'rgba(0,0,0,5%)',

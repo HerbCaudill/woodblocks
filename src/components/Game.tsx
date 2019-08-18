@@ -1,7 +1,6 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import { useGameState } from 'context'
-import { randomPiece } from 'models/pieces'
 import { Gameboard } from './Gameboard'
 import { Piece } from './Piece'
 
@@ -28,7 +27,7 @@ export const Game = ({ randomSeed = '' }: GameProps) => {
       <Gameboard />
       <div css={styles.pieces}>
         {Object.keys(availablePieces).map(d => (
-          <Piece key={d} id={d} name={randomPiece(`${randomSeed}-${d}`)} />
+          <Piece key={d} piece={availablePieces[d]} />
         ))}
       </div>
     </div>

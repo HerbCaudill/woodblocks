@@ -1,5 +1,6 @@
 ﻿import { toCellArray } from '../lib/toCellArray'
 import { LF } from '../lib/constants'
+import { Piece } from './pieces'
 
 // all boards are 10 x 10 for now
 export const N = 10
@@ -34,8 +35,8 @@ export class Board {
   toString = () => this.rows.map(rowToText).join(LF)
 
   // determines whether the piece conflicts with existing pieces on the board
-  noConflicts = (piece: Layout, [x, y]: Position) => {
-    const conflicts = piece.map((row, row_index) =>
+  noConflicts = (piece: Piece, [x, y]: Position) => {
+    const conflicts = piece.rows.map((row, row_index) =>
       row.map((cell, col_index) => this.rows[row_index + y][col_index + x].filled && cell.filled)
     )
     // returns true if any element of `conflicts` is true
@@ -43,21 +44,21 @@ export class Board {
   }
 
   // determines whether the piece fits entirely within the boundaries of the board
-  pieceFits = (piece: Layout, [x, y]: Position) => {
-    const height = piece.length
-    const width = Math.max(...piece.map(row => row.length))
+  pieceFits = (piece: Piece, [x, y]: Position) => {
+    const height = piece.rows.length
+    const width = Math.max(...piece.rows.map(row => row.length))
     return y + height <= N && x + width <= N
   }
 
   // returns true if there are no conflicts, and the piece fits within the boundaries of the board
-  canAddPiece = (piece: Layout, [x, y]: Position) =>
+  canAddPiece = (piece: Piece, [x, y]: Position) =>
     this.pieceFits(piece, [x, y]) && this.noConflicts(piece, [x, y])
 
   // tries to add piece at the given position; throws an error if it cannot be added,
   // returns the board if it can
-  addPiece = (piece: Layout, [x, y]: Position, hover: boolean = false) => {
+  addPiece = (piece: Piece, [x, y]: Position, hover: boolean = false) => {
     if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
-    piece.forEach((pieceRow, row_index) =>
+    piece.rows.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {
         const boardCell = this.rows[row_index + y][col_index + x]
         if (hover) {
@@ -76,7 +77,7 @@ export class Board {
 
   // layout showing where on the current board the given piece can be placed
   // (true = can be placed here, false = cannot be placed here)
-  allowedPositions = (piece: Layout) =>
+  allowedPositions = (piece: Piece) =>
     this.rows.map((row, row_index) =>
       row.map((cell, col_index) => ({
         filled: !cell.filled && this.canAddPiece(piece, [col_index, row_index]),

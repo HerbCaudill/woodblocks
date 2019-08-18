@@ -1,12 +1,14 @@
-﻿import { Layout } from 'models/Board'
+﻿import { LF } from 'lib/constants'
+import { textToRow } from 'lib/toCellArray'
+import { trim } from 'lib/trim'
+import { Cell } from 'models/Board'
 import makeRandom from 'seed-random'
-import { toCellReducer } from '../lib/toCellReducer'
 
 export type PieceDictionary = {
-  [key: string]: Layout
+  [key: string]: Piece
 }
 
-export const pieces_s = {
+export const shapes = {
   p1x1: `@`,
   p2x1: `@@`,
   p3x1: `@@@`,
@@ -67,10 +69,34 @@ export const pieces_s = {
          @@@`,
 } as { [key: string]: string }
 
-export const pieces = Object.keys(pieces_s).reduce(toCellReducer, {} as PieceDictionary)
+export type PieceName = keyof typeof shapes
 
-export const randomPiece = (randomSeed: string) => {
+export const randomPieceName = (randomSeed: string): PieceName => {
   const random = makeRandom(randomSeed)
   const keys = Object.keys(pieces)
-  return keys[Math.floor(random() * keys.length)]
+  const name = keys[Math.floor(random() * keys.length)]
+  return name
 }
+
+export const randomPiece = (randomSeed: string) => new Piece(randomPieceName(randomSeed))
+
+export class Piece {
+  rows: Cell[][]
+  id?: string
+  name: PieceName
+
+  constructor(name: PieceName) {
+    this.rows = trim(shapes[name])
+      .split(LF)
+      .map(textToRow)
+    this.name = name
+  }
+}
+
+export const pieces = Object.keys(shapes).reduce(
+  (result: PieceDictionary, name: string) => ({
+    ...result,
+    [name]: new Piece(name),
+  }),
+  {} as PieceDictionary
+)
