@@ -1,10 +1,10 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
-import { useGameState, useGameDispatch } from 'context'
-import { Gameboard } from './Gameboard'
-import { Piece } from './Piece'
+import { useGameDispatch, useGameState } from 'context'
 import { useEffect } from 'react'
 import { Bot } from './Bot'
+import { Gameboard } from './Gameboard'
+import { Piece } from './Piece'
 
 interface GameProps {
   randomSeed?: string
@@ -44,15 +44,12 @@ export const Game = ({ randomSeed = '' }: GameProps) => {
       <div
         css={{
           flex: 0,
-          background: 'rgba(0,0,0,.03)',
           padding: 20,
         }}
       >
         <div css={{ display: 'flex' }}>
           <div css={styles.score}>{score}</div>
-          <div>
-            <Bot />
-          </div>
+          <Bot />
         </div>
         <Gameboard />
         <div css={styles.pieces}>

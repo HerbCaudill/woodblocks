@@ -23,7 +23,7 @@ export const Piece = ({ piece }: PieceProps) => {
     collect: monitor => ({ isDragging: monitor.isDragging() }),
   })
 
-  const pieceTileSize = tileSize * 0.8
+  const pieceTileSize = tileSize * 0.6
 
   const colors = {
     off: 'transparent',

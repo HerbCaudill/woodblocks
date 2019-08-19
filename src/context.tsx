@@ -1,8 +1,8 @@
-import { Board, Position } from 'models/Board'
-import React from 'react'
-import { reducer } from './reducer'
+import { Board } from 'models/Board'
 import { Piece, randomPiece } from 'models/Piece'
+import React from 'react'
 import makeRandom from 'seed-random'
+import { reducer } from './reducer'
 
 export type GameState = {
   random: () => number
