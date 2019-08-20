@@ -15,6 +15,7 @@ const emptyBoard = () =>
         .fill(null)
         .map(_ => ({ filled: false }))
     )
+
 export class Board {
   size: number
   rows: Array<Line>
