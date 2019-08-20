@@ -2,24 +2,26 @@
 import { LF } from '../lib/constants'
 import { Piece } from './Piece'
 
+import { Line, Layout, Position } from '../types'
+
 // all boards are 10 x 10 for now
 export const N = 10
 
+const emptyBoard = () =>
+  Array(N)
+    .fill(null)
+    .map(_ =>
+      Array(N)
+        .fill(null)
+        .map(_ => ({ filled: false }))
+    )
 export class Board {
   size: number
   rows: Array<Line>
 
   constructor(s: string = '') {
     this.size = N
-    this.rows = Array(N)
-      .fill(null)
-      .map(_ =>
-        Array(N)
-          .fill(null)
-          .map(_ => ({
-            filled: false,
-          }))
-      )
+    this.rows = emptyBoard()
     if (s.length) this.fromString(s)
   }
 
@@ -85,6 +87,7 @@ export class Board {
       }))
     )
 
+  // array of positions where the given piece can be placed
   allowedPositions = (piece: Piece) => {
     const result = [] as [number, number][]
     this.rows.forEach((row, y) =>
@@ -95,6 +98,7 @@ export class Board {
     return result
   }
 
+  // find rows or columns that are completely filled, and clears them
   clearFilled = () => {
     const isFilled = (arr: Line) => !arr.some(cell => cell.filled === false)
 
@@ -123,12 +127,3 @@ export class Board {
 
 export const rowToText = (row: Line) =>
   row.map(cell => (cell.filled ? '@' : cell.hover ? 'O' : '-')).join('')
-
-export interface Cell {
-  filled: boolean
-  hover?: boolean
-}
-
-export type Line = Cell[]
-export type Layout = Line[]
-export type Position = [number, number]
