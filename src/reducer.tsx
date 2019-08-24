@@ -8,6 +8,7 @@ export const reducer: Reducer<GameState, Action> = (
   state: GameState,
   { type, payload }: Action
 ) => {
+  console.log(type, payload)
   switch (type) {
     case 'randomize': {
       const { randomSeed } = payload

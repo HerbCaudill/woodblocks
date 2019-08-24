@@ -35,6 +35,7 @@ export const Gameboard = () => {
     }),
   }
 
+  console.log('render gameboard')
   return (
     <div css={{ position: 'relative' }}>
       <div css={styles.gameOver}>Game Over</div>

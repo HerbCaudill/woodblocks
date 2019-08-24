@@ -11,6 +11,8 @@
     "build-story": "build-storybook"
   },
   "dependencies": {
+    "@types/debounce": "^1.2.0",
+    "debounce": "^1.2.0",
     "emotion": "^10.0.14",
     "polished": "^3.4.1",
     "ramda": "^0.26.1",
