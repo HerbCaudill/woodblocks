@@ -3,6 +3,7 @@ import { LF } from '../lib/constants'
 import { Piece } from './Piece'
 
 import { Line, Layout, Position } from '../types'
+import { sum } from 'lib/gapScore'
 
 // all boards are 10 x 10 for now
 export const N = 10
@@ -18,12 +19,22 @@ const emptyBoard = () =>
 
 export class Board {
   size: number
-  rows: Array<Line>
 
   constructor(s: string = '') {
     this.size = N
     this.rows = emptyBoard()
     if (s.length) this.fromString(s)
+  }
+
+  rows: Array<Line>
+
+  get columns() {
+    const column = (col_index: number) => this.rows.map(row => row[col_index])
+    return this.rows.map((_, i) => column(i))
+  }
+
+  get filledCount() {
+    return sum(this.rows.map(r => r.map(cell => (cell.filled ? 1 : 0))).flat())
   }
 
   fromArray = (arr: Layout) => {
@@ -114,8 +125,7 @@ export class Board {
       .filter(row_index => isFilled(this.rows[row_index]))
 
     // find filled columns
-    const column = (col_index: number) => this.rows.map(row => row[col_index])
-    const columns = this.rows.map((_, i) => column(i))
+    const columns = this.columns
     const filledColumns = columns.map((_, i) => i).filter(i => isFilled(columns[i]))
 
     // clear all filled

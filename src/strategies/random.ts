@@ -1,4 +1,4 @@
-﻿import { Strategy, Position } from '../types'
+﻿import { Strategy } from '../types'
 
 const random: Strategy = ({ board, pieces }) => {
   // find the first piece that has at least one legal move
