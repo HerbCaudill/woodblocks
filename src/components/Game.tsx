@@ -53,8 +53,8 @@ export const Game = ({ randomSeed = '' }: GameProps) => {
         </div>
         <Gameboard />
         <div css={styles.pieces}>
-          {availablePieces.map(d => (
-            <Piece key={d.id} piece={d} />
+          {availablePieces.map((d, i) => (
+            <Piece key={i} piece={d} />
           ))}
         </div>
       </div>

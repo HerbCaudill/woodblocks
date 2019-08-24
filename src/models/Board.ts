@@ -4,6 +4,7 @@ import { Piece } from './Piece'
 
 import { Line, Layout, Position } from '../types'
 import { sum } from 'lib/gapScore'
+import * as R from 'ramda'
 
 // all boards are 10 x 10 for now
 export const N = 10
@@ -42,7 +43,7 @@ export class Board {
     return this
   }
 
-  clone = () => new Board(this.toString())
+  clone = () => new Board().fromArray(R.clone(this.rows))
 
   fromString = (s: string) => this.fromArray(toCellArray(s))
 
@@ -77,20 +78,25 @@ export class Board {
     this.clearHover()
     piece.rows.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {
-        const boardCell = this.rows[row_index + y][col_index + x]
-        if (hover) {
-          // we're just hovering the piece, not adding it to the board
-          boardCell.hover = pieceCell.filled
-        } else {
-          boardCell.filled = pieceCell.filled || boardCell.filled
-          this.clearFilled()
+        if (pieceCell.filled) {
+          const boardCell = this.rows[row_index + y][col_index + x]
+          boardCell.color = piece.color
+          if (hover) boardCell.hover = true
+          else boardCell.filled = true
         }
       })
     )
+    this.clearFilled()
     return this
   }
 
-  clearHover = () => this.rows.forEach(row => row.forEach(cell => (cell.hover = false)))
+  clearHover = () =>
+    this.rows.forEach(row =>
+      row.forEach(cell => {
+        if (cell.hover) cell.color = ''
+        cell.hover = false
+      })
+    )
 
   // layout showing where on the current board the given piece can be placed
   // (true = can be placed here, false = cannot be placed here)

@@ -4,6 +4,7 @@ import { Board } from 'models/Board'
 export interface Cell {
   filled: boolean
   hover?: boolean
+  color?: string
 }
 
 export type Line = Cell[]

@@ -2,7 +2,7 @@
 import { textToRow } from 'lib/toCellArray'
 import { trim } from 'lib/trim'
 import { Cell } from 'types'
-
+import { desaturate } from 'polished'
 export type PieceDictionary = {
   [key: string]: Piece
 }
@@ -68,26 +68,40 @@ export const shapes = {
          @@@`,
 } as { [key: string]: string }
 
-export type PieceName = keyof typeof shapes
-
-export const randomPieceName = (random: () => number = Math.random): PieceName => {
-  const keys = Object.keys(pieces)
-  const name = keys[Math.floor(random() * keys.length)]
-  return name
-}
-
-export const randomPiece = (random?: () => number) => new Piece(randomPieceName(random))
+const colors = [
+  '#f44336',
+  '#f47f36',
+  '#f4bb36',
+  '#f1f436',
+  '#b5f436',
+  '#79f436',
+  '#3df436',
+  '#36f46b',
+  '#36f4a7',
+  '#36f4e3',
+  '#36c9f4',
+  '#368df4',
+  '#3651f4',
+  '#5736f4',
+  '#9336f4',
+  '#cf36f4',
+  '#f436dd',
+  '#f436a1',
+  '#f43665',
+].map(c => desaturate(0.5, c))
 
 export class Piece {
   rows: Cell[][]
   id?: string
-  name: PieceName
+  name: string
+  color: string
 
-  constructor(name: PieceName) {
+  constructor(name: string, color: string = 'red') {
     this.rows = trim(shapes[name])
       .split(LF)
       .map(textToRow)
     this.name = name
+    this.color = color
   }
 
   get points() {
@@ -96,9 +110,15 @@ export class Piece {
 }
 
 export const pieces = Object.keys(shapes).reduce(
-  (result: PieceDictionary, name: string) => ({
+  (result: PieceDictionary, name: string, i: number) => ({
     ...result,
-    [name]: new Piece(name),
+    [name]: new Piece(name, colors[i]),
   }),
   {} as PieceDictionary
 )
+
+export const randomPiece = (random: () => number = Math.random) => {
+  const randomIndex = Math.floor(random() * Object.keys(pieces).length)
+  const pieceName = Object.keys(pieces)[randomIndex]
+  return pieces[pieceName]
+}

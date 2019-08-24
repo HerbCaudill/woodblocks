@@ -47,6 +47,7 @@ export const Gameboard = () => {
                 position={[x, y]}
                 isFilled={cell.filled === true}
                 isHover={cell.hover === true}
+                color={cell.color}
               />
             ))}
           </div>

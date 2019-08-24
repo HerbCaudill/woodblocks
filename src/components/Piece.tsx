@@ -25,11 +25,6 @@ export const Piece = ({ piece }: PieceProps) => {
 
   const pieceTileSize = tileSize * 0.6
 
-  const colors = {
-    off: 'transparent',
-    on: 'rgba(0,0,255,50%)',
-  }
-
   const styles = {
     piece: css({
       cursor: 'pointer',
@@ -46,7 +41,7 @@ export const Piece = ({ piece }: PieceProps) => {
       css({
         width: pieceTileSize,
         height: pieceTileSize,
-        background: cell.filled ? colors.on : colors.off,
+        background: cell.filled ? piece.color : 'transparent',
         marginRight: 2,
       }),
   }

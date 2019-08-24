@@ -8,10 +8,11 @@ import { DraggablePiece } from './Piece'
 interface TileProps {
   isFilled: boolean
   isHover: boolean
+  color?: string
   position: Position
 }
 
-export const Tile = ({ isFilled, isHover, position }: TileProps) => {
+export const Tile = ({ isFilled, isHover, color, position }: TileProps) => {
   const { tileSize, board, gameOver } = useGameState()
   const dispatch = useGameDispatch()
 
@@ -32,19 +33,13 @@ export const Tile = ({ isFilled, isHover, position }: TileProps) => {
 
   const clearHover = () => dispatch({ type: 'clearHover', payload: {} })
 
-  const colors = {
-    empty: 'rgba(0,0,0,5%)',
-    filled: 'rgba(0,0,255,40%)',
-    hover: 'rgba(0,0,255,20%)',
-  }
-
   const styles = {
     tile: css({
       width: tileSize,
       height: tileSize,
-      background: isFilled ? colors.filled : isHover ? colors.hover : colors.empty,
+      background: isFilled || isHover ? color : 'rgba(0,0,0,5%)',
+      opacity: isHover ? 0.5 : 1,
       marginRight: 2,
-      transition: 'background .2s',
     }),
   }
 
