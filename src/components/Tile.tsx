@@ -1,7 +1,7 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import { useGameDispatch, useGameState } from 'context'
-import { Position } from 'models/Board'
+import { Position } from 'types'
 import { useDrop } from 'react-dnd'
 import { DraggablePiece } from './Piece'
 

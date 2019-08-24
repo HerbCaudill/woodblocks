@@ -42,7 +42,7 @@ export class Board {
     return this
   }
 
-  clone = () => new Board().fromArray(this.rows)
+  clone = () => new Board(this.toString())
 
   fromString = (s: string) => this.fromArray(toCellArray(s))
 
@@ -71,7 +71,9 @@ export class Board {
   // tries to add piece at the given position; throws an error if it cannot be added,
   // returns the board if it can
   addPiece = (piece: Piece, [x, y]: Position, hover: boolean = false) => {
-    if (!this.canAddPiece(piece, [x, y])) throw new Error('Cannot add piece here')
+    if (!this.canAddPiece(piece, [x, y])) {
+      throw new Error(`Cannot add piece ${piece.name} at [${x}, ${y}]`)
+    }
     this.clearHover()
     piece.rows.forEach((pieceRow, row_index) =>
       pieceRow.forEach((pieceCell, col_index) => {

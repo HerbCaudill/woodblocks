@@ -1,10 +1,10 @@
 ﻿/** @jsx jsx */
 import { css, jsx } from '@emotion/core'
 import { useGameState, useGameDispatch } from 'context'
-import strategy from '../strategies/random'
+import strategy from '../strategies/minimizeGaps'
 
 export const Bot = () => {
-  const { board, availablePieces, random, gameOver } = useGameState()
+  const { board, availablePieces, gameOver } = useGameState()
   const dispatch = useGameDispatch()
 
   const styles = {

@@ -1,7 +1,7 @@
 ﻿import { LF } from 'lib/constants'
 import { textToRow } from 'lib/toCellArray'
 import { trim } from 'lib/trim'
-import { Cell } from 'models/Board'
+import { Cell } from 'types'
 
 export type PieceDictionary = {
   [key: string]: Piece
