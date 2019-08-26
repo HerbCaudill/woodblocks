@@ -36,23 +36,16 @@ export const Bot = () => {
   const { board, availablePieces, gameOver } = useGameState()
   const dispatch = useGameDispatch()
 
-  if (gameOver) setAutoplaying(false)
-
   const play = () => {
     const situation = { board, pieces: availablePieces }
     const [piece, position] = strategy(situation)
     dispatch({ type: 'addPiece', payload: { piece, position } })
   }
+  const restart = () => dispatch({ type: 'restart', payload: {} })
+  const autoplay = () => setAutoplaying(!autoplaying)
 
-  useInterval(play, autoplaying ? 1000 : null);
-
-  const restart = () => {
-    dispatch({ type: 'restart', payload: {} })
-  }
-
-  const autoplay = () => {
-    setAutoplaying(!autoplaying)
-  }
+  // update on a timer if autoplay has been started
+  useInterval(play, !gameOver && autoplaying ? 150 : null);
 
   return (
     <div>
@@ -62,13 +55,10 @@ export const Bot = () => {
           <button css={{ ...styles.button, fontWeight: 900 }} onClick={restart}>
             <span role='img' aria-label='restart'>⭮</span>
           </button>
-          <button css={{ ...styles.button, }} onClick={play}>
+          <button css={styles.button} onClick={play}>
             <span role='img' aria-label='play'>▶</span>
           </button>
-          <button css={{
-            ...styles.button,
-            letterSpacing: '-.1em',
-          }} onClick={autoplay}>
+          <button css={styles.button} onClick={autoplay}>
             <span role='img' aria-label='autoplay'>{autoplaying ? '❚❚' : '▶▶'}</span>
           </button>
         </div>
