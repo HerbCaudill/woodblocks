@@ -52,6 +52,14 @@ export const reducer: Reducer<GameState, Action> = (
       return { ...state, board }
     }
 
+    case 'restart': {
+      const board = new Board()
+      const availablePieces = newPieces()
+      const score = 0
+      const gameOver = false
+      return { ...state, board, availablePieces, score, gameOver }
+    }
+
     default: {
       return state
     }

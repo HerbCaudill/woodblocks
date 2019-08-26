@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/debounce": "^1.2.0",
     "awesome-debounce-promise": "^2.1.0",
+    "cuid": "^2.1.6",
     "debounce": "^1.2.0",
     "emotion": "^10.0.14",
     "polished": "^3.4.1",

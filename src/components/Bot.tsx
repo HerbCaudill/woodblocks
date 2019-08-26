@@ -1,30 +1,42 @@
 ﻿/** @jsx jsx */
-import { css, jsx } from '@emotion/core'
-import { useGameState, useGameDispatch } from 'context'
-import strategy from '../strategies/minimizeGaps'
+import { CSSObject, jsx } from '@emotion/core';
+import { useGameDispatch, useGameState } from 'context';
+import strategy from '../strategies/minimizeGaps';
+import { useState } from 'react';
+import { useInterval } from './useInterval';
+
+// const pause = () => new Promise(ok => requestAnimationFrame(ok))
+// const wait = (t: number = 0) => new Promise(ok => setTimeout(ok, t))
 
 export const Bot = () => {
-  const { board, availablePieces, gameOver } = useGameState()
-  const dispatch = useGameDispatch()
-
   const styles = {
-    button: css({
+    button: {
       fontSize: 24,
-      padding: '10px 20px',
+      lineHeight: '24px',
+      textAlign: 'center',
+      width: 68,
+      height: 48,
       borderRadius: 10,
-      border: '1px solid #ccc',
+      border: '2px solid blue',
       background: 'white',
+      color: 'blue',
+      margin: 5,
       outline: 'none',
       cursor: 'pointer',
       ':hover': {
-        background: '#ddd',
+        background: 'rgba(0,0,255,.1)'
       },
       ':active': {
-        background: 'blue',
-        color: 'white',
+        background: '',
       },
-    }),
+    } as CSSObject,
   }
+
+  const [autoplaying, setAutoplaying] = useState(false)
+  const { board, availablePieces, gameOver } = useGameState()
+  const dispatch = useGameDispatch()
+
+  if (gameOver) setAutoplaying(false)
 
   const play = () => {
     const situation = { board, pieces: availablePieces }
@@ -32,13 +44,39 @@ export const Bot = () => {
     dispatch({ type: 'addPiece', payload: { piece, position } })
   }
 
+  useInterval(play, autoplaying ? 1000 : null);
+
+  const restart = () => {
+    dispatch({ type: 'restart', payload: {} })
+  }
+
+  const autoplay = () => {
+    setAutoplaying(!autoplaying)
+  }
+
   return (
     <div>
       {!gameOver && (
-        <button css={styles.button} onClick={play}>
-          Play
-        </button>
+        <div>
+
+          <button css={{ ...styles.button, fontWeight: 900 }} onClick={restart}>
+            <span role='img' aria-label='restart'>⭮</span>
+          </button>
+          <button css={{ ...styles.button, }} onClick={play}>
+            <span role='img' aria-label='play'>▶</span>
+          </button>
+          <button css={{
+            ...styles.button,
+            letterSpacing: '-.1em',
+          }} onClick={autoplay}>
+            <span role='img' aria-label='autoplay'>{autoplaying ? '❚❚' : '▶▶'}</span>
+          </button>
+        </div>
+
       )}
     </div>
   )
 }
+
+
+

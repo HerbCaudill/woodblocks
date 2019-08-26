@@ -56,7 +56,7 @@ export const Tile = ({ isFilled, isHover, color, position }: TileProps) => {
       <div
         ref={drop}
         css={styles.tile}
-      // onDragLeave={debounce(clearHover, 110)}
+        onDragLeave={debounce(clearHover, 110)}
       />
     )
 }

@@ -3,6 +3,7 @@ import { Piece, randomPiece } from 'models/Piece'
 import React from 'react'
 import makeRandom from 'seed-random'
 import { reducer } from './reducer'
+import uuid from 'cuid'
 
 export type GameState = {
   random: () => number
@@ -27,7 +28,7 @@ const newPiece = (id: string | number, random?: () => number) => {
   return piece
 }
 
-export const newPieces = (random?: () => number) => [1, 2, 3].map(id => newPiece(id, random))
+export const newPieces = (random?: () => number) => [1, 2, 3].map(() => newPiece(uuid(), random))
 
 export const defaultGameState: GameState = {
   random: makeRandom(''),
