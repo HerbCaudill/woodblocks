@@ -1,10 +1,12 @@
 ﻿/** @jsx jsx */
-import { css, jsx } from '@emotion/core'
-import { useGameDispatch, useGameState } from 'context'
-import { Position } from 'types'
-import { useDrop, DropTargetMonitor } from 'react-dnd'
-import { DraggablePiece } from './Piece'
-import { debounce } from 'lib/debounce'
+import { css, jsx } from '@emotion/core';
+import debounce from 'awesome-debounce-promise';
+import { useGameDispatch, useGameState } from 'context';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
+import { Position } from 'types';
+import useConstant from 'use-constant';
+import { DraggablePiece } from './Piece';
+
 
 interface TileProps {
   isFilled: boolean
@@ -26,13 +28,12 @@ export const Tile = ({ isFilled, isHover, color, position }: TileProps) => {
       dispatch({ type: 'hoverPiece', payload: { piece: item.piece, position } })
   }
 
+  const debouncedOnHover = useConstant(() => debounce(onHover, 100))
+
   const [, drop] = useDrop({
     accept: 'piece',
-
     drop: onDrop,
-
-    hover: debounce(onHover, 1000),
-
+    hover: debouncedOnHover,
     canDrop: (item: DraggablePiece) => board.canAddPiece(item.piece, position),
   })
 
@@ -45,12 +46,17 @@ export const Tile = ({ isFilled, isHover, color, position }: TileProps) => {
       background: isFilled || isHover ? color : 'rgba(0,0,0,5%)',
       opacity: isHover ? 0.5 : 1,
       marginRight: 2,
+      transition: 'background .1s, opacity .1s',
     }),
   }
 
   return gameOver ? (
     <div css={styles.tile} />
   ) : (
-    <div ref={drop} css={styles.tile} onDragLeave={clearHover} />
-  )
+      <div
+        ref={drop}
+        css={styles.tile}
+      // onDragLeave={debounce(clearHover, 110)}
+      />
+    )
 }

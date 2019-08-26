@@ -12,16 +12,11 @@
  * @param {Boolean} whether to execute at the beginning (`false`)
  * @api public
  */
-export const debounce = function<F extends Function>(
-  func: F,
-  wait: number = 100,
-  immediate: boolean = false
-) {
+export const debounce = function<F extends Function>(func: F, wait: number = 100) {
   let timeout: any
   let context: Function | null
   let args: any[] | null
   let timestamp: number
-  let result: Function
 
   function later() {
     var last = Date.now() - timestamp
@@ -29,46 +24,19 @@ export const debounce = function<F extends Function>(
     if (last < wait && last >= 0) {
       timeout = setTimeout(later, wait - last)
     } else {
+      clearTimeout(timeout)
       timeout = null
-      if (!immediate) {
-        console.log('calling debounced function 1')
-        result = func.apply(context, args)
-        context = args = null
-      }
+      console.log('calling debounced function')
+      func.apply(context, args)
+      context = args = null
     }
   }
 
   var debounced = function(this: Function) {
-    context = this
     args = [...arguments]
     timestamp = Date.now()
-    var callNow = immediate && !timeout
     if (!timeout) timeout = setTimeout(later, wait)
-    if (callNow) {
-      console.log('calling debounced function 2')
-      result = func.apply(context, args)
-      context = args = null
-    }
-
-    return result
   }
-
-  // debounced.clear = function() {
-  //   if (timeout) {
-  //     clearTimeout(timeout)
-  //     timeout = null
-  //   }
-  // }
-
-  // debounced.flush = function() {
-  //   if (timeout) {
-  //     result = func.apply(context, args)
-  //     context = args = null
-
-  //     clearTimeout(timeout)
-  //     timeout = null
-  //   }
-  // }
 
   return debounced
 }
